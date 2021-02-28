@@ -32,9 +32,25 @@ if (WEBGL.isWebGLAvailable()) {
   let ingenuityController, cubeHelperMesh
   let rotor1, rotor2
 
+
   //PRE-LOAD CONDITIONALS
 
+  let isRendering = true
   let modelReady = false
+  let isHovering = false
+
+  //BUTTONS
+
+  const renderButton = document.querySelector('#renderButton')
+  renderButton.addEventListener('click', () => {
+    if (isRendering) {
+      isRendering = false
+
+    } else {
+      isRendering = true
+      renderLoop()
+    }
+  })
 
 
   //INITIALIZE THREE
@@ -56,8 +72,8 @@ if (WEBGL.isWebGLAvailable()) {
 
     //FOG
     {
-      const near = -5000;
-      const far = 30000;
+      const near = -8000;
+      const far = 20000;
       const color = 0xd4bfaf;
       scene.fog = new THREE.Fog(color, near, far);
       //scene.background = new THREE.Color(color);
@@ -92,7 +108,7 @@ if (WEBGL.isWebGLAvailable()) {
     scene.add(ingenuityController)
     ingenuityController.rotation.y = 0.45
     ingenuityController.position.y = 50
-    ingenuityController.add(cubeHelperMesh)
+    //ingenuityController.add(cubeHelperMesh)
 
     //LOADERS
 
@@ -195,6 +211,7 @@ if (WEBGL.isWebGLAvailable()) {
   }
 
   const hover = () => {
+    isHovering = true
     let isUp = false
     let amount = (Math.random() * hoverHeight.hoverMax) + hoverHeight.hoverMin
 
@@ -203,6 +220,7 @@ if (WEBGL.isWebGLAvailable()) {
     }
 
   window.setInterval(() => {
+    console.log('interval')
     isUp = !isUp
     if (isUp) {
       amount = (Math.random() * hoverHeight.hoverMax) + hoverHeight.hoverMin
@@ -216,7 +234,7 @@ if (WEBGL.isWebGLAvailable()) {
 
 
   const updateCamera = () => {
-    const maxRotation = 200
+    const maxRotation = 350
     gsap.to(camera.rotation, { duration: 7, ease: 'power1.out', y: mouse.x * maxRotation * 0.001 * -1 })
   }
 
@@ -253,7 +271,7 @@ if (WEBGL.isWebGLAvailable()) {
       setTimeout(() => {startTakeOff = true}, 1000)
       setTimeout(() => {inFlight = true}, 2000)
       takeOff()
-      hover()
+      if (!isHovering) hover()
     }
 
     ingenuityController.position.y = hoverHeight.currentX()
@@ -263,7 +281,7 @@ if (WEBGL.isWebGLAvailable()) {
     }
     if (modelReady && inFlight) {
       updateCamera()
-      updateBG()
+      //updateBG()
       updateHoverMouseRotation()
       updateHoverMousePosition()
     }
@@ -279,11 +297,13 @@ if (WEBGL.isWebGLAvailable()) {
 
   //RENDER LOOP
   const renderLoop = () => {
-    statsFPS.begin()
-    update()
-    render()
-    statsFPS.end()
-    requestAnimationFrame( renderLoop )
+    if (isRendering) {
+      statsFPS.begin()
+      update()
+      render()
+      statsFPS.end()
+      requestAnimationFrame( renderLoop )
+    }
   }
 
   init()
