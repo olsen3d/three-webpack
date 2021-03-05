@@ -76,7 +76,7 @@ if (WEBGL.isWebGLAvailable()) {
       const far = 20000;
       const color = 0xd4bfaf;
       scene.fog = new THREE.Fog(color, near, far);
-      //scene.background = new THREE.Color(color);
+      scene.background = new THREE.Color(color);
     }
 
     //DEBUG MODELS AND HELPERS
@@ -92,15 +92,20 @@ if (WEBGL.isWebGLAvailable()) {
     //MATERIALS AND TEXTURES
 
     const loaderTEXTURE = new THREE.TextureLoader();
-    const texture = loaderTEXTURE.load(
+    const textureBG = loaderTEXTURE.load(
       '../static/textures/bg5.jpg',
       () => {
-        const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-        rt.fromEquirectangularTexture(renderer, texture);
+        const rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
+        rt.fromEquirectangularTexture(renderer, textureBG);
         scene.background = rt;
-      });
+      }
+      )
 
-    const reflectMat = new THREE.MeshBasicMaterial({color: 0xeeeeee, envMap: texture })
+    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake.jpg')
+
+    const lightMat = new THREE.MeshBasicMaterial({map: textureINGENUITY})
+
+    const reflectMat = new THREE.MeshBasicMaterial({color: 0xeeeeee, envMap: textureBG })
 
 
     //GROUPS AND CONTROLLERS
@@ -118,6 +123,7 @@ if (WEBGL.isWebGLAvailable()) {
     loaderGLTF.setDRACOLoader( dracoLoader );
 
     //INGENUITY
+    /*
     loaderGLTF.load( '../static/models/ingenuity.glb', function ( gltf ) {
       var model = gltf.scene;
       model.scale.set(500, 500, 500)
@@ -128,6 +134,23 @@ if (WEBGL.isWebGLAvailable()) {
         if (o.isMesh) o.material = reflectMat;
         if (o.name === 'rotors_01') rotor1 = o
         if (o.name === 'rotors_02') rotor2 = o
+      })
+
+      modelReady = true
+    }, undefined, function ( error ) {
+      console.error( error );
+    } )
+    */
+    loaderGLTF.load( '../static/models/ingDraco.gltf', function ( gltf ) {
+      var model = gltf.scene;
+      model.scale.set(1.25, 1.25, 1.25)
+      model.position.y = -50
+      scene.add( model );
+      ingenuityController.add(model)
+      model.traverse((o) => {
+        if (o.isMesh) o.material = lightMat;
+        if (o.name === 'rotor1') rotor1 = o
+        if (o.name === 'rotor2') rotor2 = o
       })
 
       modelReady = true
@@ -247,10 +270,10 @@ if (WEBGL.isWebGLAvailable()) {
 
 
   const updateRotors = () => {
-    if (rotor1.rotation.x > 360) rotor1.rotation.x = 0
-    if (rotor2.rotation.x > 360) rotor2.rotation.x = 0
-    rotor1.rotation.x += 0.3
-    rotor2.rotation.x -= 0.4
+    if (rotor1.rotation.y > 360) rotor1.rotation.y = 0
+    if (rotor2.rotation.y > 360) rotor2.rotation.y = 0
+    rotor1.rotation.y += 0.3 //0.3
+    rotor2.rotation.y -= 0.4 //0.4
     //debugArea.innerHTML = rotor1.rotation.x
   }
 

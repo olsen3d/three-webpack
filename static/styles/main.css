@@ -97,7 +97,7 @@ p {
 
 #headerContainer {
   position: absolute;
-  top: 70px;
+  top: 110px;
   width: 100vw;
   display: flex;
   flex-direction: column;
