@@ -103,6 +103,7 @@ p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: crosshair;
 }
 
 .header {
@@ -129,10 +130,21 @@ p {
 #THREEContainer {
   /* position:absolute;
   top: 0; */
+  cursor: crosshair;
 }
 
 #debugPane {
   position: fixed;
   top: 100px;
   left: 10px;
+}
+
+.infoArea {
+  background-color: #333333;
+  height: 100vh;
+}
+
+.infoArea2 {
+  background-color: #eeeeee;
+  height: 100vh;
 }

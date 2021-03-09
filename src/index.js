@@ -14,11 +14,11 @@ import gsap from 'gsap'
 //DEBUG
 
 const statsFPS = new Stats()
-statsFPS.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+statsFPS.showPanel( 3 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( statsFPS.dom )
 
-const debug1 = document.querySelector('#debug1')
-const debug2 = document.querySelector('#debug2')
+// const debug1 = document.querySelector('#debug1')
+// const debug2 = document.querySelector('#debug2')
 
 
 
@@ -59,10 +59,10 @@ if (WEBGL.isWebGLAvailable()) {
 
     //CAMERA
     camera = new THREE.PerspectiveCamera(
-      65,
+      65, //65
       window.innerWidth / window.innerHeight,
       1,
-      50000
+      320000
     )
     camera.position.set(0, 350, 1000)
     camera.lookAt(0, 350, 0)
@@ -72,9 +72,9 @@ if (WEBGL.isWebGLAvailable()) {
 
     //FOG
     {
-      const near = 0;
-      const far = 20000;
-      const color = 0xd4bfaf;
+      const near = -50000;
+      const far = 200000;
+      const color = 0xd9c6bb;
       scene.fog = new THREE.Fog(color, near, far);
       //scene.background = new THREE.Color(color);
     }
@@ -105,16 +105,20 @@ if (WEBGL.isWebGLAvailable()) {
 
     // const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake.jpg')
     const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake4k.jpg')
+    const textureTERRAIN = loaderTEXTURE.load('../static/textures/TERRAINBAKED01.jpg')
 
     const lightMat = new THREE.MeshBasicMaterial({map: textureINGENUITY})
+    const terrainMat = new THREE.MeshBasicMaterial({map: textureTERRAIN})
 
     const reflectMat = new THREE.MeshBasicMaterial({color: 0xeeeeee, envMap: textureBG })
     
     hybridMat = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
+      color: 0xeeeeee,
       map: textureINGENUITY,
-      reflectivity: 1,
-      combine: THREE.AddOperation
+      specularMap: textureINGENUITY,
+      reflectivity: 2,
+      combine: THREE.AddOperation,
+      fog: false
     })
 
     //GROUPS AND CONTROLLERS
@@ -169,17 +173,34 @@ if (WEBGL.isWebGLAvailable()) {
 
     //TERRAIN
     //export1.glb
+    // loaderGLTF.load( '../static/models/terrainDraco.gltf', function ( gltf ) {
+    //   var terrain = gltf.scene;
+    //   terrain.scale.set(0.5, 0.5, 0.5)
+    //   terrain.rotation.x = THREE.Math.degToRad(-90)
+    //   terrain.rotation.z = THREE.Math.degToRad(180)
+    //   terrain.position.y = 100
+    //   //model.position.y = -50
+    //   var newMaterial = new THREE.MeshBasicMaterial({color: 0x774422, wireframe: false});
+    //   // var newMaterial = new THREE.MeshNormalMaterial();
+    //   terrain.traverse((o) => {
+    //     if (o.isMesh) o.material = newMaterial;
+    //   });
+    //   scene.add( terrain );
+    // }, undefined, function ( error ) {
+    //   console.error( error );
+    // } )
+
     loaderGLTF.load( '../static/models/terrainDraco.gltf', function ( gltf ) {
       var terrain = gltf.scene;
-      terrain.scale.set(0.5, 0.5, 0.5)
-      terrain.rotation.x = THREE.Math.degToRad(-90)
-      terrain.rotation.z = THREE.Math.degToRad(180)
-      terrain.position.y = 100
+      terrain.scale.set(1, 1, 1)
+      // terrain.rotation.x = THREE.Math.degToRad(-90)
+      // terrain.rotation.y = THREE.Math.degToRad(180)
+      terrain.position.y = 0
       //model.position.y = -50
-      var newMaterial = new THREE.MeshBasicMaterial({color: 0x774422, wireframe: false});
+      //var newMaterial = new THREE.MeshBasicMaterial({color: 0x84624c});
       // var newMaterial = new THREE.MeshNormalMaterial();
       terrain.traverse((o) => {
-        if (o.isMesh) o.material = newMaterial;
+        if (o.isMesh) o.material = terrainMat;
       });
       scene.add( terrain );
     }, undefined, function ( error ) {
@@ -270,11 +291,11 @@ if (WEBGL.isWebGLAvailable()) {
     gsap.to(camera.rotation, { duration: 7, ease: 'power1.out', y: mouse.x * maxRotation * 0.001 * -1 })
   }
 
-  const updateBG = () => {
-    debug1.innerHTML = window.innerHeight
-    debug2.innerHTML = window.innerHeight / 4
-  gsap.to("#bgImg", { duration: 7, ease: 'power1.out', backgroundPosition: `${(mouse.x * 200 * -1)}px -${window.innerHeight / 2}px` })
-  }
+  // const updateBG = () => {
+  //   debug1.innerHTML = window.innerHeight
+  //   debug2.innerHTML = window.innerHeight / 4
+  // gsap.to("#bgImg", { duration: 7, ease: 'power1.out', backgroundPosition: `${(mouse.x * 200 * -1)}px -${window.innerHeight / 2}px` })
+  // }
 
 
 
