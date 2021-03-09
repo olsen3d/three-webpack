@@ -72,11 +72,11 @@ if (WEBGL.isWebGLAvailable()) {
 
     //FOG
     {
-      const near = -8000;
+      const near = 0;
       const far = 20000;
       const color = 0xd4bfaf;
       scene.fog = new THREE.Fog(color, near, far);
-      scene.background = new THREE.Color(color);
+      //scene.background = new THREE.Color(color);
     }
 
     //DEBUG MODELS AND HELPERS
@@ -91,22 +91,31 @@ if (WEBGL.isWebGLAvailable()) {
 
     //MATERIALS AND TEXTURES
 
+    let rt, hybridMat
     const loaderTEXTURE = new THREE.TextureLoader();
     const textureBG = loaderTEXTURE.load(
-      '../static/textures/bg5.jpg',
+      '../static/textures/bg9.jpg',
       () => {
-        const rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
+        rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
         rt.fromEquirectangularTexture(renderer, textureBG);
+        hybridMat.envMap = rt
         scene.background = rt;
       }
       )
 
-    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake.jpg')
+    // const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake.jpg')
+    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake4k.jpg')
 
     const lightMat = new THREE.MeshBasicMaterial({map: textureINGENUITY})
 
     const reflectMat = new THREE.MeshBasicMaterial({color: 0xeeeeee, envMap: textureBG })
-
+    
+    hybridMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      map: textureINGENUITY,
+      reflectivity: 1,
+      combine: THREE.AddOperation
+    })
 
     //GROUPS AND CONTROLLERS
     ingenuityController = new THREE.Group()
@@ -148,7 +157,7 @@ if (WEBGL.isWebGLAvailable()) {
       scene.add( model );
       ingenuityController.add(model)
       model.traverse((o) => {
-        if (o.isMesh) o.material = lightMat;
+        if (o.isMesh) o.material = hybridMat;
         if (o.name === 'rotor1') rotor1 = o
         if (o.name === 'rotor2') rotor2 = o
       })
