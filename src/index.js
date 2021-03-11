@@ -58,7 +58,7 @@ if (WEBGL.isWebGLAvailable()) {
       65, //65
       window.innerWidth / window.innerHeight,
       1,
-      320000
+      380000
     )
     camera.position.set(0, 350, 1000)
     camera.lookAt(0, 350, 0)
@@ -68,8 +68,8 @@ if (WEBGL.isWebGLAvailable()) {
 
     //FOG
     {
-      const near = -50000;
-      const far = 200000;
+      const near = -200000;
+      const far = 250000;
       const color = 0xd9c6bb;
       scene.fog = new THREE.Fog(color, near, far);
     }
@@ -92,7 +92,7 @@ if (WEBGL.isWebGLAvailable()) {
       }
       )
 
-    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITYbake4k.jpg')
+    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_01.jpg')
     const textureTERRAIN = loaderTEXTURE.load('../static/textures/TERRAINBAKED01.jpg')
 
     terrainMat = new THREE.MeshBasicMaterial({
@@ -123,7 +123,7 @@ if (WEBGL.isWebGLAvailable()) {
     loaderGLTF.setDRACOLoader( dracoLoader );
 
     //INGENUITY
-    loaderGLTF.load( '../static/models/ingDraco.gltf', function ( gltf ) {
+    loaderGLTF.load( '../static/models/ingDraco02.gltf', function ( gltf ) {
       var model = gltf.scene;
       model.scale.set(1.25, 1.25, 1.25)
       model.position.y = -50
