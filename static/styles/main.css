@@ -152,7 +152,7 @@ p {
 .curvedTop {
   position: relative;
   background: #222222;
-  height: 10vh;
+  height: 8vh;
   border-bottom-left-radius: 50% 100%;
   border-bottom-right-radius: 50% 100%;
   z-index: 99;
@@ -173,5 +173,5 @@ p {
   bottom: 0;
   width: 100%;
   background: #222222;
-  height: 12%;
+  height: 10%;
 }

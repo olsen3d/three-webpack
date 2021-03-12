@@ -24,7 +24,7 @@ if (WEBGL.isWebGLAvailable()) {
   //VARIABLES
 
   let camera, scene, renderer
-  let ingenuityController
+  let ingenuityController, shadowMesh
   let rotor1, rotor2
 
 
@@ -94,6 +94,7 @@ if (WEBGL.isWebGLAvailable()) {
 
     const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_01.jpg')
     const textureTERRAIN = loaderTEXTURE.load('../static/textures/TERRAINBAKED01.jpg')
+    const textureShadow = loaderTEXTURE.load('../static/textures/shadowMask4.jpg')
 
     terrainMat = new THREE.MeshBasicMaterial({
       map: textureTERRAIN,
@@ -153,6 +154,20 @@ if (WEBGL.isWebGLAvailable()) {
       console.error( error );
     } )
 
+    const shadowPlane = new THREE.PlaneGeometry(1400, 1400, 10, 10)
+    const shadowMat = new THREE.MeshBasicMaterial(
+      {
+        color: 0x333333,
+        alphaMap: textureShadow,
+        transparent: true,
+        fog: false
+      }
+    )
+    shadowMesh = new THREE.Mesh(shadowPlane, shadowMat)
+    shadowMesh.rotation.x = THREE.Math.degToRad(-90)
+    shadowMesh.position.y = -120
+    scene.add(shadowMesh)
+
 
     //RENDERER
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
@@ -182,13 +197,13 @@ if (WEBGL.isWebGLAvailable()) {
 
   //INGENUITY FUNCTIONALITY
   let hoverHeight = {
-    normal: 100,
+    normal: 80,
     normalMax: 300,
     hoverAmount: 0,
     mouseAmount: 0,
     hoverMin: 10,
     hoverMax: 25,
-    mouseMax: 150,
+    mouseMax: 180,
     currentX: function() {
       return this.normal + this.hoverAmount + this.mouseAmount
     }
@@ -243,8 +258,6 @@ if (WEBGL.isWebGLAvailable()) {
     rotor2.rotation.y -= 0.4 //0.4
   }
 
-
-
   //POST-LOAD CONDITIONALS
 
   let startTakeOff = false
@@ -260,13 +273,14 @@ if (WEBGL.isWebGLAvailable()) {
     }
 
     ingenuityController.position.y = hoverHeight.currentX()
-
+    
     if (modelReady) {
+      shadowMesh.position.x = ingenuityController.position.x + -120
+      shadowMesh.position.z = hoverHeight.currentX() - 150
       updateRotors()
     }
     if (modelReady && inFlight) {
       updateCamera()
-      //updateBG()
       updateHoverMouseRotation()
       updateHoverMousePosition()
     }
