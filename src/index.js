@@ -14,7 +14,7 @@ import gsap from 'gsap'
 //DEBUG
 
 const statsFPS = new Stats()
-statsFPS.showPanel( 3 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+statsFPS.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( statsFPS.dom )
 
 //MAIN
@@ -48,6 +48,11 @@ if (WEBGL.isWebGLAvailable()) {
     }
   })
 
+  const debugButton = document.querySelector('#debugButton')
+  debugButton.addEventListener('click', () => {
+    console.log(renderer.info)
+  })
+
 
   //INITIALIZE THREE
 
@@ -55,10 +60,10 @@ if (WEBGL.isWebGLAvailable()) {
 
     //CAMERA
     camera = new THREE.PerspectiveCamera(
-      65, //65
+      60, //65
       window.innerWidth / window.innerHeight,
       1,
-      380000
+      240000
     )
     camera.position.set(0, 350, 1000)
     camera.lookAt(0, 350, 0)
@@ -68,13 +73,12 @@ if (WEBGL.isWebGLAvailable()) {
 
     //FOG
     {
-      const near = -200000;
-      const far = 250000;
+      const near = -50000;
+      const far = 220000;
       const color = 0xd9c6bb;
       scene.fog = new THREE.Fog(color, near, far);
     }
 
-    //DEBUG MODELS AND HELPERS
 
     //MATERIALS AND TEXTURES LOADERS
 
@@ -92,12 +96,12 @@ if (WEBGL.isWebGLAvailable()) {
       }
       )
 
-    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_01.jpg')
-    const textureTERRAIN = loaderTEXTURE.load('../static/textures/TERRAINBAKED01.jpg')
+    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_02.jpg')
+    const textureROCKS = loaderTEXTURE.load('../static/textures/TERRAIN_TEXTURE_03.jpg')
     const textureShadow = loaderTEXTURE.load('../static/textures/shadowMask4.jpg')
 
     terrainMat = new THREE.MeshBasicMaterial({
-      map: textureTERRAIN,
+      map: textureROCKS,
       fog: true
     })
 
@@ -115,6 +119,8 @@ if (WEBGL.isWebGLAvailable()) {
     scene.add(ingenuityController)
     ingenuityController.rotation.y = 0.45
     ingenuityController.position.y = 50
+
+
 
     //MODEL LOADERS
 
@@ -142,12 +148,13 @@ if (WEBGL.isWebGLAvailable()) {
     } )
 
     //TERRAIN
-    loaderGLTF.load( '../static/models/terrainDraco.gltf', function ( gltf ) {
+    loaderGLTF.load( '../static/models/terrainDraco2.gltf', function ( gltf ) {
       var terrain = gltf.scene;
       terrain.scale.set(1.25, 1.25, 1.25)
       terrain.position.y = 0
       terrain.traverse((o) => {
         if (o.isMesh) o.material = terrainMat;
+        // if (o.isMesh) o.material = new THREE.MeshNormalMaterial()
       });
       scene.add( terrain );
     }, undefined, function ( error ) {
@@ -157,8 +164,10 @@ if (WEBGL.isWebGLAvailable()) {
     const shadowPlane = new THREE.PlaneGeometry(1400, 1400, 10, 10)
     const shadowMat = new THREE.MeshBasicMaterial(
       {
-        color: 0x333333,
+        color: 0x000000,
         alphaMap: textureShadow,
+        opacity: 0.7
+        ,
         transparent: true,
         fog: false
       }
@@ -175,6 +184,8 @@ if (WEBGL.isWebGLAvailable()) {
     renderer.setSize(window.innerWidth, window.innerHeight)
     const container = document.getElementById( 'THREEContainer' )
     container.appendChild(renderer.domElement)
+
+    //scene.overrideMaterial = new MeshNormalMaterial()
 
   }
 
@@ -235,7 +246,6 @@ if (WEBGL.isWebGLAvailable()) {
     }
 
   window.setInterval(() => {
-    console.log('interval')
     isUp = !isUp
     if (isUp) {
       amount = (Math.random() * hoverHeight.hoverMax) + hoverHeight.hoverMin
@@ -273,7 +283,7 @@ if (WEBGL.isWebGLAvailable()) {
     }
 
     ingenuityController.position.y = hoverHeight.currentX()
-    
+
     if (modelReady) {
       shadowMesh.position.x = ingenuityController.position.x + -120
       shadowMesh.position.z = hoverHeight.currentX() - 150
