@@ -80,6 +80,8 @@ if (WEBGL.isWebGLAvailable()) {
     }
 
 
+
+
     //MATERIALS AND TEXTURES LOADERS
 
     let rt, hybridMat, terrainMat
@@ -150,6 +152,7 @@ if (WEBGL.isWebGLAvailable()) {
     //TERRAIN
     loaderGLTF.load( '../static/models/terrainDraco2.gltf', function ( gltf ) {
       var terrain = gltf.scene;
+      terrain.matrixAutoUpdate = false
       terrain.scale.set(1.25, 1.25, 1.25)
       terrain.position.y = 0
       terrain.traverse((o) => {
@@ -180,12 +183,13 @@ if (WEBGL.isWebGLAvailable()) {
 
     //RENDERER
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(1)
     renderer.setSize(window.innerWidth, window.innerHeight)
     const container = document.getElementById( 'THREEContainer' )
     container.appendChild(renderer.domElement)
 
-    //scene.overrideMaterial = new MeshNormalMaterial()
+    //scene.overrideMaterial = new THREE.MeshNormalMaterial()
+    //window.devicePixelRatio for high res displays
 
   }
 
