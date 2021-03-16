@@ -60,8 +60,8 @@ if (WEBGL.isWebGLAvailable()) {
 
     //CAMERA
     camera = new THREE.PerspectiveCamera(
-      60, //65
-      window.innerWidth / window.innerHeight,
+      50, //65
+      window.innerWidth / (window.innerHeight * 0.8),
       1,
       240000
     )
@@ -184,7 +184,7 @@ if (WEBGL.isWebGLAvailable()) {
     //RENDERER
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
     renderer.setPixelRatio(1)
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
     const container = document.getElementById( 'THREEContainer' )
     container.appendChild(renderer.domElement)
 
@@ -197,7 +197,7 @@ if (WEBGL.isWebGLAvailable()) {
   function onWindowResize() {
     camera.aspect = 720 / 480
     camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
   }
   window.addEventListener('resize', onWindowResize, false)
 
