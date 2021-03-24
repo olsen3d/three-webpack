@@ -35,38 +35,17 @@ if (WEBGL.isWebGLAvailable()) {
   let isHovering = false
 
   ScrollTrigger.create({
+  id: 'heroTHREE',
   trigger: '#THREEContainer',
   start: 'center top',
   end: 'bottom top',
-  // onEnter: () => console.log('enter'),
   onEnterBack: () => {
     isRendering = true
     renderLoop()
   },
   onLeave: () => {isRendering = false},
-  // onLeaveBack: () => console.log('leaveback'),
   markers: true
 })
-
-  //BUTTONS
-
-  const renderButton = document.querySelector('#renderButton')
-  renderButton.addEventListener('click', () => {
-    if (isRendering) {
-      isRendering = false
-
-    } else {
-      isRendering = true
-      // eslint-disable-next-line no-use-before-define
-      renderLoop()
-    }
-  })
-
-  const debugButton = document.querySelector('#debugButton')
-  debugButton.addEventListener('click', () => {
-    console.log(renderer.info)
-  })
-
 
   //INITIALIZE THREE
 
