@@ -11,8 +11,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
-
-
 //DEBUG
 
 const statsFPS = new Stats()
@@ -35,6 +33,20 @@ if (WEBGL.isWebGLAvailable()) {
   let isRendering = true
   let modelReady = false
   let isHovering = false
+
+  ScrollTrigger.create({
+  trigger: '#THREEContainer',
+  start: 'center top',
+  end: 'bottom top',
+  // onEnter: () => console.log('enter'),
+  onEnterBack: () => {
+    isRendering = true
+    renderLoop()
+  },
+  onLeave: () => {isRendering = false},
+  // onLeaveBack: () => console.log('leaveback'),
+  markers: true
+})
 
   //BUTTONS
 
