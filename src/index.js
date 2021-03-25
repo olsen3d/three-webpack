@@ -258,8 +258,8 @@ if (WEBGL.isWebGLAvailable()) {
   const maxHorizontalPosition = 1000
   const updateHoverMousePosition = () => {
     gsap.to(ingenuityController.position, { duration: 5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
-    gsap.to(dustMesh.position, { duration: 9.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
-    gsap.to(dustMesh2.position, { duration: 9.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(dustMesh.position, { duration: 5.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(dustMesh2.position, { duration: 12, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
     gsap.to(hoverHeight, { duration: 5, ease: 'power2.out', mouseAmount: mouse.y * hoverHeight.mouseMax })
   }
 
