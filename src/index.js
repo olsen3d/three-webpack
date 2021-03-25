@@ -24,7 +24,7 @@ if (WEBGL.isWebGLAvailable()) {
   //VARIABLES
 
   let camera, scene, renderer
-  let ingenuityController, shadowMesh, dustMesh
+  let ingenuityController, shadowMesh, dustMesh, dustMesh2
   let rotor1, rotor2
 
 
@@ -94,6 +94,7 @@ if (WEBGL.isWebGLAvailable()) {
     const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_02.jpg')
     const textureROCKS = loaderTEXTURE.load('../static/textures/TERRAIN_TEXTURE_03.jpg')
     const textureShadow = loaderTEXTURE.load('../static/textures/shadowMask4.jpg')
+    const textureDust = loaderTEXTURE.load('../static/textures/dust.jpg')
 
     terrainMat = new THREE.MeshBasicMaterial({
       map: textureROCKS,
@@ -158,28 +159,39 @@ if (WEBGL.isWebGLAvailable()) {
     } )
 
 
-    const testPlane = new THREE.PlaneGeometry(1200, 400, 0)
+    const testPlane = new THREE.PlaneGeometry(1000, 300, 0)
 
     const video = document.getElementById('video')
     video.play()
     const videoTexture = new THREE.VideoTexture(video);
     //80593c
     //9f7248
-    const videoMaterial =  new THREE.MeshBasicMaterial( 
+    const videoMaterial =  new THREE.MeshBasicMaterial(
       {
-        color: 0x9f7248, 
-        alphaMap: videoTexture, 
+        // color: 0x9f7248,
+        map: textureDust,
+        alphaMap: videoTexture,
+        opacity: 0.75,
         transparent: true,
         fog: false,
-        depthWrite: false, 
+        depthWrite: false,
         depthTest: false
       } );
 
     const testMat = new THREE.MeshNormalMaterial()
     dustMesh = new THREE.Mesh(testPlane, videoMaterial)
-    dustMesh.position.y = 120
+    dustMesh.position.y = 200
+    dustMesh.position.z = 200
     dustMesh.rotation.y = THREE.Math.degToRad(0)
+    dustMesh.rotation.y = THREE.Math.degToRad(15)
     scene.add(dustMesh)
+
+    dustMesh2 = new THREE.Mesh(testPlane, videoMaterial)
+    dustMesh2.position.y = 200
+    dustMesh2.position.z = 200
+    dustMesh2.rotation.y = THREE.Math.degToRad(0)
+    dustMesh2.rotation.y = THREE.Math.degToRad(-15)
+    scene.add(dustMesh2)
 
     const shadowPlane = new THREE.PlaneGeometry(1400, 1400, 10, 10)
     const shadowMat = new THREE.MeshBasicMaterial(
@@ -207,7 +219,7 @@ if (WEBGL.isWebGLAvailable()) {
     const container = document.getElementById( 'THREEContainer' )
     container.appendChild(renderer.domElement)
 
-    //scene.overrideMaterial = new THREE.MeshNormalMaterial()
+    // scene.overrideMaterial = new THREE.MeshNormalMaterial({wireframe: true})
     //window.devicePixelRatio for high res displays
 
   }
@@ -231,8 +243,8 @@ if (WEBGL.isWebGLAvailable()) {
 
   //INGENUITY FUNCTIONALITY
   let hoverHeight = {
-    normal: 80,
-    normalMax: 300,
+    normal: 40,
+    normalMax: 225,
     hoverAmount: 0,
     mouseAmount: 0,
     hoverMin: 10,
@@ -246,6 +258,8 @@ if (WEBGL.isWebGLAvailable()) {
   const maxHorizontalPosition = 1000
   const updateHoverMousePosition = () => {
     gsap.to(ingenuityController.position, { duration: 5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(dustMesh.position, { duration: 9.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(dustMesh2.position, { duration: 9.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
     gsap.to(hoverHeight, { duration: 5, ease: 'power2.out', mouseAmount: mouse.y * hoverHeight.mouseMax })
   }
 
@@ -309,7 +323,7 @@ if (WEBGL.isWebGLAvailable()) {
 
     if (modelReady) {
       shadowMesh.position.x = ingenuityController.position.x + -120
-      dustMesh.position.x = ingenuityController.position.x
+      // dustMesh.position.x = ingenuityController.position.x
       shadowMesh.position.z = hoverHeight.currentX() - 150
       updateRotors()
     }
