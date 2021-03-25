@@ -82,7 +82,7 @@ if (WEBGL.isWebGLAvailable()) {
     const loaderTEXTURE = new THREE.TextureLoader();
 
     const textureBG = loaderTEXTURE.load(
-      '../static/textures/bg9.jpg',
+      '../static/textures/bgInspect.jpg',
       () => {
         rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
         rt.fromEquirectangularTexture(renderer, textureBG);
