@@ -60,7 +60,7 @@ gsap.registerPlugin(ScrollTrigger)
     heroRenderLoop()
   },
   onLeave: () => {isHeroRendering = false},
-  markers: true
+  markers: false
 })
 
 ScrollTrigger.create({
@@ -78,7 +78,7 @@ ScrollTrigger.create({
   },
   onLeave: () => {isInspRendering = false},
   onLeaveBack: () => {isInspRendering = false},
-  markers: true
+  markers: false
 })
 
   //INITIALIZE THREE
@@ -134,7 +134,7 @@ ScrollTrigger.create({
 
     //MATERIALS AND TEXTURES LOADERS
 
-    let hero360, background360, hybridMat, xRayMat
+    let hero360, background360, hybridMat, inspHybridMat, xRayMat
 
     const loaderTexture = new THREE.TextureLoader();
 
@@ -153,7 +153,7 @@ ScrollTrigger.create({
         () => {
           background360 = new THREE.WebGLCubeRenderTarget(inspTextureBG.image.height);
           background360.fromEquirectangularTexture(inspRenderer, inspTextureBG);
-          hybridMat.envMap = background360
+          inspHybridMat.envMap = background360
           inspScene.background = background360
         }
     )
@@ -169,6 +169,15 @@ ScrollTrigger.create({
       map: textureINGENUITY,
       specularMap: textureINGENUITY,
       reflectivity: 2,
+      combine: THREE.AddOperation,
+      fog: false
+    })
+
+    inspHybridMat = new THREE.MeshBasicMaterial({
+      color: 0xeeeeee,
+      map: textureINGENUITY,
+      specularMap: textureINGENUITY,
+      reflectivity: 1,
       combine: THREE.AddOperation,
       fog: false
     })
@@ -228,16 +237,26 @@ ScrollTrigger.create({
     loaderGLTF.setDRACOLoader( dracoLoader );
 
     loaderGLTF.load( '../static/models/ingDraco02.gltf', function ( gltf ) {
-      var model = gltf.scene;
+      var model = gltf.scene
       model.scale.set(1.25, 1.25, 1.25)
       model.position.y = -50
       heroScene.add( model )
-      inspScene.add( model )
       heroIngenuityController.add(model)
-      // inspIngenuityController.add(model)
+      var model2 = model.clone()
+      inspScene.add( model2 )
+      inspIngenuityController.add(model2)
       model.traverse((o) => {
         if (o.isMesh) {
           o.material = hybridMat
+        }
+        if (o.name === 'rotor1') rotor1 = o
+        if (o.name === 'rotor1Base') rotor1Base = o
+        if (o.name === 'rotor2') rotor2 = o
+        if (o.name === 'rotor2Base') rotor2Base = o
+      })
+      model2.traverse((o) => {
+        if (o.isMesh) {
+          o.material = inspHybridMat
           ingenuityMeshes.push(o)
         }
         if (o.name === 'rotor1') rotor1 = o
@@ -339,20 +358,20 @@ ScrollTrigger.create({
 
     const switchInspectObjects = object => {
       if (!object) {
-        ingenuityMeshes.forEach(mesh => {mesh.material = hybridMat})
+        ingenuityMeshes.forEach(mesh => {mesh.material = inspHybridMat})
         return
         }
 
       if (object === 'rotors') {
         const rotorGroup = [rotor1, rotor1Base, rotor2, rotor2Base]
         const otherMeshes = ingenuityMeshes.filter(mesh => !rotorGroup.includes(mesh))
-        rotorGroup.forEach(mesh => {mesh.material = hybridMat})
+        rotorGroup.forEach(mesh => {mesh.material = inspHybridMat})
         otherMeshes.forEach(mesh => {mesh.material = xRayMat})
         return
       }
 
       const otherMeshes = ingenuityMeshes.filter(mesh => mesh.name !== object.name)
-      object.material = hybridMat
+      object.material = inspHybridMat
       otherMeshes.forEach(mesh => {mesh.material = xRayMat})
     }
 
@@ -584,7 +603,6 @@ ScrollTrigger.create({
   const heroRender = () => heroRenderer.render(heroScene, heroCamera)
   const heroRenderLoop = () => {
     if (isHeroRendering) {
-      console.log('hero render')
       heroUpdate()
       modelReady && heroRender()
       requestAnimationFrame( heroRenderLoop )
@@ -627,7 +645,6 @@ ScrollTrigger.create({
   //RENDER LOOP
   const inspRenderLoop = () => {
     if (isInspRendering) {
-      console.log('insp render')
       inspUpdate()
       inspRender()
       requestAnimationFrame( inspRenderLoop )
