@@ -8,14 +8,118 @@
     <title>Three testing</title>
   </head>
   <body>
-      <div id="THREEContainer"></div>
+      <div id="THREEHeroContainer">
+        <img id='inspMagnify' src='static/icons/magnify.png' alt='magnify' width='30' height='30'>
+      </div>
         <div id='headerContainer'>
           <h1 class="header">INGENUITY</h1>
         </div>
       </div>
     <section class='infoArea'></section>
-    <section class='infoArea2'></section>
-    <video id="video" playsinline webkit-playsinline muted loop autoplay width="640" height="480" src="static/textures/dust.mp4" style="display: none;"></video>
+    <section class='sectionContainer'>
+      some content here
+    </section>
+    <section id='inspectSection' class="sectionContainer">
+      <div id="inspectContainer">
+        <div id="THREEInspContainer">
+          <img id='inspMagnify' src='static/icons/magnify.png' alt='magnify' width='30' height='30'>
+          <div id='THREEInspWindow'></div>
+        </div>
+        <div id="inspectTextArea">
+
+          <div id="inspectInitial" class='inspectCard inspectVisible'>
+            <H3>DIMENSIONS</H3>
+            <p class="inspectCopy">
+              <b>Height:</b> 1.6 feet (0.49 meters)
+              <br>
+              <br>
+              <b>Weight:</b> About 4.0 pounds (1.8 kilograms) on Earth, and about 1.5 pounds (0.68 kilograms) on Mars
+            </p>
+            <H3>ELECTRONICS</H3>
+            <p class="inspectCopy">
+              <b>CPU:</b> Snapdragon processor with a Linux operating system performs high-level functions on the helicopter. The Snapdragon processor has a 2.26 GHz Quad-core 801 processor with 2 GB Random Access Memory (RAM), 32 GB Flash memory
+              <br>
+              <br>
+              <b>Altimeter:</b> Time-of-flight altimeter with a range of 10’s of meters from Garmin (Lidar-Lite-V3).
+              <br>
+              <br>
+              <b>Inclinometer:</b> A 2-axis MEMS MuRata device (SCA100T-D02)
+              <br>
+              <br>
+              <b>Flight Processor:</b> TMS570LC43x high-reliability automotive processor operating at 300 MHz, with 512 K RAM, 4 MB flash memory
+
+            </p>
+          </div>
+
+          <div id="solarPanel" class='inspectCard'>
+            <H3>SOLAR CELLS</H3>
+            <p class="inspectCopy">
+              Ingenuity is powered by a six lithium-ion battery 
+              system that is recharged daily by a solar array 
+              located atop its rotor system. Solar cells in the 
+              array are optimized for the solar spectrum 
+              encountered at Mars, and the stored energy is 
+              used to operate heaters for the cold Martian 
+              nights as well as power the helicopter during 
+              flight operations. Power expended by the helicopter 
+              during an up-to-90-second flight is about 350 watts.
+            </p>
+            <H3>Communications</H3>
+            <p class="inspectCopy">
+              Communication delays are an inherent part of working with spacecraft across interplanetary distances. Commands will need to be sent well in advance, with engineering data coming back from the spacecraft long after each flight takes place. In the meantime, Ingenuity will have a lot of autonomy to make its own decisions about how to fly to a waypoint.
+              Ingenuity will communicate through the rover, which will then communicate with an orbiter that in turn communicates with Earth.
+
+            </p>
+          </div>
+
+          <div id="rotors" class='inspectCard'>
+            <H3>ROTOR SYSTEM</H3>
+            <p class="inspectCopy">
+              Features four specially made carbon-fiber blades, arranged into two rotors that spin in opposite directions at around 2,400 rpm – many times faster than a passenger helicopter on Earth.
+              <br>
+              <br>
+              Mars' thin atmosphere makes it difficult to achieve enough lift. Because the Mars atmosphere is 99% less dense than Earth's, Ingenuity has to be light, with rotor blades that are much larger and spin much faster than what would be required for a helicopter of Ingenuity's mass on Earth.
+            </p>
+            <H3>FLIGHT</H3>
+            <p class="inspectCopy">
+              The helicopter will fly at altitudes of 10-15 feet (3-5 meters) in altitude and travel as far as 160 feet (50 meters) downrange and back to the starting area.
+              <br>
+              <br>
+              Engineers will fly the helicopter for no more than about 90 seconds on each flight.              
+            </p>
+            
+          </div>
+
+          <div id="body" class='inspectCard'>
+            <H3>FUELSELAGE</H3>
+            <p class="inspectCopy">
+              Mars has beyond bone-chilling temperatures, with nights as cold as minus 130 degrees Fahrenheit (minus 90 degrees Celsius) at Jezero Crater.
+              The helicopter uses solar cells to recharge its batteries, of which majority of it is used to stay warm on cold Martian nights with the temperature falling to minus 130 degrees F
+            </p>
+            <H3>CAMERAS</H3>
+            <p class="inspectCopy">
+              <b>NAV (Navigation):</b> global-shutter, nadir pointed grayscale 640 by 480 pixel sensor mounted to a Sunny optics module. It has a field-of-view (FOV) of 133 deg (horizontal) by 100 deg (vertical) and is capable of acquiring images at 10 frames/sec. Visual features are extracted from the images and tracked from frame to frame to provide a velocity estimate.
+            </p>
+            <p class="inspectCopy">
+              <b>RTE (Return-to-Earth):</b> rolling shutter, high-resolution 4208 by 3120 pixel sensor (Sony IMX 214) with a Bayer color filter array mated with an O-film optics module. This camera has a FOV of 47 deg (horizontal) by 47 deg (vertical) with an average IFOV of 0.26 mRad/pixel.
+            </p>
+          </div>
+
+          <div id="legs" class='inspectCard'>
+            <H3>LANDING SYSTEM</H3>
+            <p class="inspectCopy">
+              The landing system consists of 4 legs made of tapered carbon fiber/epoxy tubes. The feet are designed to prevent the leg from digging into soft landing surfaces. They also provide some damping by scrubbing against the ground as the leg flexes. Additional energy absorption is provided by flexible deforming elements at the hinges connecting the legs to the landing gear mounting plate which is affixed to the mast. The leg designs are tested against a variety of Martian surfaces 14 ranging from hard rock to deep sand.
+            </p>
+            <p class="inspectCopy">
+              The landing gear is designed to allow the landing on surface with slopes upto 10 deg in any direction with the vehicle at an additional roll (or pitch) angle of 30 deg. Vertical velocity at the height where the passive gravity drop is initiated can be as high as 2.5 m/s. A horizontal velocity of upto 0.5 m/s can be present due to delivery errors in the control system.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <section class='sectionContainer'></section>
+    <video id="dustVideo" playsinline webkit-playsinline muted loop autoplay width="640" height="480" src="static/textures/dust.mp4" style="display: none;"></video>
     <script src="public/bundle.js"></script>
   </body>
 </html>

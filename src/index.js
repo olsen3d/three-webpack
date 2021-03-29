@@ -13,29 +13,72 @@ gsap.registerPlugin(ScrollTrigger)
 
 //MAIN
 
-  //VARIABLES
+  //HERO VARIABLES
 
-  let camera, scene, renderer
-  let ingenuityController, shadowMesh, dustMesh, dustMesh2
-  let rotor1, rotor2
+  let heroCamera, heroScene, heroRenderer
+  let heroIngenuityController, heroShadowMesh, heroDustMesh, heroDustMesh2
+  // let rotor1, rotor2
+
+  //INSP VARIABLES
+
+  let inspCamera, inspScene, inspRenderer
+  let inspIngenuityController
+  let heroRotor1, heroRotor2
+  let rotor1, rotor2, rotor1Base, rotor2Base, dustMesh, dustMesh2
+  const ingenuityMeshes = []
+
+  const inspMouse = new THREE.Vector2()
+  const raycaster = new THREE.Raycaster()
+  const dustVideo = document.getElementById('dustVideo')
+  dustVideo.play()
+
+  const canvas = document.querySelector('#THREEInspContainer')
+  let canvasMouse = false
 
 
-  //PRE-LOAD CONDITIONALS
+  //HERO PRE-LOAD CONDITIONALS
 
-  let isRendering = true
+  let isHeroRendering = true
+  // let modelReady = false
+  let isHeroHovering = false
+
+  //INSP PRE-LOAD CONDITIONALS
+
+  let isInspRendering = true
   let modelReady = false
-  let isHovering = false
+  let isInspHovering = false
+  let zoomed = false
+
+  //SCROLLTRIGGERS
 
   ScrollTrigger.create({
   id: 'heroTHREE',
-  trigger: '#THREEContainer',
-  start: 'center top',
+  trigger: '#THREEHeroContainer',
+  start: 'center bottom',
   end: 'bottom top',
   onEnterBack: () => {
-    isRendering = true
-    renderLoop()
+    isHeroRendering = true
+    heroRenderLoop()
   },
-  onLeave: () => {isRendering = false},
+  onLeave: () => {isHeroRendering = false},
+  markers: false
+})
+
+ScrollTrigger.create({
+  id: 'inspTHREE',
+  trigger: '#inspectSection',
+  start: 'top center',
+  end: 'bottom center',
+  onEnter: () => {
+    isInspRendering = true
+    inspRenderLoop()
+  },
+  onEnterBack: () => {
+    isInspRendering = true
+    inspRenderLoop()
+  },
+  onLeave: () => {isInspRendering = false},
+  onLeaveBack: () => {isInspRendering = false},
   markers: false
 })
 
@@ -43,47 +86,84 @@ gsap.registerPlugin(ScrollTrigger)
 
   function init() {
 
-    //CAMERA
-    camera = new THREE.PerspectiveCamera(
+    //SCENES
+
+    heroScene = new THREE.Scene()
+    inspScene = new THREE.Scene()
+
+
+
+
+
+    //CAMERAS
+
+    heroCamera = new THREE.PerspectiveCamera(
       50, //65
       window.innerWidth / (window.innerHeight * 0.8),
       1,
-      240000
+      2400
     )
-    camera.position.set(0, 350, 1000)
-    camera.lookAt(0, 350, 0)
+    heroCamera.position.set(0, 350, 1000)
+    heroCamera.lookAt(0, 350, 0)
 
-    //SCENE
-    scene = new THREE.Scene()
+    inspCamera = new THREE.PerspectiveCamera(
+      46, //42
+      700 / 600,
+      1,
+      5000
+    )
+    inspCamera.position.set(250, 340, 500)
+    inspCamera.lookAt(0, 340, 0)
+
+
+
+
+    //GROUPS AND CONTROLLERS
+
+    heroIngenuityController = new THREE.Group()
+    heroScene.add(heroIngenuityController)
+    heroIngenuityController.rotation.y = 0.45
+    heroIngenuityController.position.y = 50
+
+    inspIngenuityController = new THREE.Group()
+    inspScene.add(inspIngenuityController)
+    inspIngenuityController.position.y = 210
+
 
 
 
 
     //MATERIALS AND TEXTURES LOADERS
 
-    let rt, hybridMat, terrainMat
+    let hero360, background360, hybridMat, inspHybridMat, xRayMat
 
-    const loaderTEXTURE = new THREE.TextureLoader();
+    const loaderTexture = new THREE.TextureLoader();
 
-    const textureBG = loaderTEXTURE.load(
+    const heroTextureBG = loaderTexture.load(
       '../static/textures/herobg1.jpg',
-      () => {
-        rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
-        rt.fromEquirectangularTexture(renderer, textureBG);
-        hybridMat.envMap = rt
-        scene.background = rt;
-      }
-      )
+        () => {
+          hero360 = new THREE.WebGLCubeRenderTarget(heroTextureBG.image.height);
+          hero360.fromEquirectangularTexture(heroRenderer, heroTextureBG);
+          hybridMat.envMap = hero360
+          heroScene.background = hero360;
+        }
+    )
 
-    const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_02.jpg')
-    const textureROCKS = loaderTEXTURE.load('../static/textures/TERRAIN_TEXTURE_03.jpg')
-    const textureShadow = loaderTEXTURE.load('../static/textures/shadowMask4.jpg')
-    const textureDust = loaderTEXTURE.load('../static/textures/dust.jpg')
+    const inspTextureBG = loaderTexture.load(
+      '../static/textures/bgInspect3.jpg',
+        () => {
+          background360 = new THREE.WebGLCubeRenderTarget(inspTextureBG.image.height);
+          background360.fromEquirectangularTexture(inspRenderer, inspTextureBG);
+          inspHybridMat.envMap = background360
+          inspScene.background = background360
+        }
+    )
 
-    terrainMat = new THREE.MeshBasicMaterial({
-      map: textureROCKS,
-      fog: true
-    })
+    const textureINGENUITY = loaderTexture.load('../static/textures/INGENUITY_TEXTURE_BAKED_02.jpg')
+    const textureShadow = loaderTexture.load('../static/textures/shadowMask4.jpg')
+    const textureDust = loaderTexture.load('../static/textures/dust.jpg')
+    const dustVideoTexture = new THREE.VideoTexture(dustVideo)
+
 
     hybridMat = new THREE.MeshBasicMaterial({
       color: 0xeeeeee,
@@ -94,11 +174,59 @@ gsap.registerPlugin(ScrollTrigger)
       fog: false
     })
 
-    //GROUPS AND CONTROLLERS
-    ingenuityController = new THREE.Group()
-    scene.add(ingenuityController)
-    ingenuityController.rotation.y = 0.45
-    ingenuityController.position.y = 50
+    inspHybridMat = new THREE.MeshBasicMaterial({
+      color: 0xeeeeee,
+      map: textureINGENUITY,
+      specularMap: textureINGENUITY,
+      reflectivity: 1,
+      combine: THREE.AddOperation,
+      fog: false
+    })
+
+    xRayMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      map: textureINGENUITY,
+      transparent: true,
+      opacity: 0.4,
+      fog: false
+    })
+
+    const inspDustMat =  new THREE.MeshBasicMaterial(
+        {
+          map: textureDust,
+          alphaMap: dustVideoTexture,
+          opacity: 1,
+          transparent: true,
+          fog: false,
+        }
+      )
+
+    const heroDustMat =  new THREE.MeshBasicMaterial(
+      {
+        map: textureDust,
+        alphaMap: dustVideoTexture,
+        opacity: 0.7,
+        transparent: true,
+        fog: false,
+        depthWrite: false,
+        depthTest: false
+      }
+    )
+
+    const shadowMat = new THREE.MeshBasicMaterial(
+      {
+        color: 0x000000,
+        alphaMap: textureShadow,
+        opacity: 0.7,
+        transparent: true,
+        fog: false,
+        depthWrite: false,
+        depthTest: false
+      }
+    )
+
+
+
 
 
 
@@ -109,17 +237,31 @@ gsap.registerPlugin(ScrollTrigger)
     dracoLoader.setDecoderPath( 'src/draco/' );
     loaderGLTF.setDRACOLoader( dracoLoader );
 
-    //INGENUITY
     loaderGLTF.load( '../static/models/ingDraco02.gltf', function ( gltf ) {
-      var model = gltf.scene;
+      var model = gltf.scene
       model.scale.set(1.25, 1.25, 1.25)
       model.position.y = -50
-      scene.add( model );
-      ingenuityController.add(model)
+      heroScene.add( model )
+      heroIngenuityController.add(model)
+      var model2 = model.clone()
+      inspScene.add( model2 )
+      inspIngenuityController.add(model2)
       model.traverse((o) => {
-        if (o.isMesh) o.material = hybridMat;
+        if (o.isMesh) {
+          o.material = hybridMat
+        }
+        if (o.name === 'rotor1') heroRotor1 = o
+        if (o.name === 'rotor2') heroRotor2 = o
+      })
+      model2.traverse((o) => {
+        if (o.isMesh) {
+          o.material = inspHybridMat
+          ingenuityMeshes.push(o)
+        }
         if (o.name === 'rotor1') rotor1 = o
+        if (o.name === 'rotor1Base') rotor1Base = o
         if (o.name === 'rotor2') rotor2 = o
+        if (o.name === 'rotor2Base') rotor2Base = o
       })
 
       modelReady = true
@@ -128,70 +270,177 @@ gsap.registerPlugin(ScrollTrigger)
     } )
 
 
-    const testPlane = new THREE.PlaneGeometry(1000, 300, 0)
+    const heroDustPlane = new THREE.PlaneGeometry(1000, 300, 0)
+    heroDustMesh = new THREE.Mesh(heroDustPlane, heroDustMat)
+    heroDustMesh.position.y = 200
+    heroDustMesh.position.z = 200
+    heroDustMesh.rotation.y = THREE.Math.degToRad(0)
+    heroDustMesh.rotation.y = THREE.Math.degToRad(15)
+    heroScene.add(heroDustMesh)
 
-    const video = document.getElementById('video')
-    video.play()
-    const videoTexture = new THREE.VideoTexture(video);
+    heroDustMesh2 = new THREE.Mesh(heroDustPlane, heroDustMat)
+    heroDustMesh2.position.y = 200
+    heroDustMesh2.position.z = 200
+    heroDustMesh2.rotation.y = THREE.Math.degToRad(0)
+    heroDustMesh2.rotation.y = THREE.Math.degToRad(-15)
+    heroScene.add(heroDustMesh2)
 
-    const videoMaterial =  new THREE.MeshBasicMaterial(
-      {
-        map: textureDust,
-        alphaMap: videoTexture,
-        opacity: 0.75,
-        transparent: true,
-        fog: false,
-        depthWrite: false,
-        depthTest: false
-      } );
+    const inspDustPlane01 = new THREE.PlaneGeometry(600, 250, 0)
+    const inspDustPlane02 = new THREE.PlaneGeometry(1000, 400, 0)
+    dustMesh = new THREE.Mesh(inspDustPlane01, inspDustMat)
+    dustMesh.position.y = 270
+    dustMesh.position.x = 225
+    dustMesh.position.z = 170
+    dustMesh.rotation.y = THREE.Math.degToRad(25)
+    inspScene.add(dustMesh)
 
-    dustMesh = new THREE.Mesh(testPlane, videoMaterial)
-    dustMesh.position.y = 200
-    dustMesh.position.z = 200
-    dustMesh.rotation.y = THREE.Math.degToRad(0)
-    dustMesh.rotation.y = THREE.Math.degToRad(15)
-    scene.add(dustMesh)
-
-    dustMesh2 = new THREE.Mesh(testPlane, videoMaterial)
-    dustMesh2.position.y = 200
-    dustMesh2.position.z = 200
-    dustMesh2.rotation.y = THREE.Math.degToRad(0)
-    dustMesh2.rotation.y = THREE.Math.degToRad(-15)
-    scene.add(dustMesh2)
+    dustMesh2 = new THREE.Mesh(inspDustPlane02, inspDustMat)
+    dustMesh2.position.y = 260
+    dustMesh2.position.x = -105
+    dustMesh2.position.z = -170
+    dustMesh2.rotation.y = THREE.Math.degToRad(25)
+    inspScene.add(dustMesh2)
 
     const shadowPlane = new THREE.PlaneGeometry(1400, 1400, 10, 10)
-    const shadowMat = new THREE.MeshBasicMaterial(
-      {
-        color: 0x000000,
-        alphaMap: textureShadow,
-        opacity: 0.7
-        ,
-        transparent: true,
-        fog: false,
-        depthWrite: false, 
-        depthTest: false
+
+    heroShadowMesh = new THREE.Mesh(shadowPlane, shadowMat)
+    heroShadowMesh.rotation.x = THREE.Math.degToRad(-90)
+    heroShadowMesh.position.y = -120
+    heroScene.add(heroShadowMesh)
+
+
+
+
+
+
+
+
+    //RENDERERS
+
+    heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+    heroRenderer.setPixelRatio(1)
+    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    const heroContainer = document.getElementById( 'THREEHeroContainer' )
+    heroContainer.appendChild(heroRenderer.domElement)
+
+    inspRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+    inspRenderer.setPixelRatio(1)
+    inspRenderer.setSize(600, 500)
+    const inspContainer = document.getElementById( 'THREEInspWindow' )
+    inspContainer.appendChild(inspRenderer.domElement)
+
+
+
+
+
+
+
+    const threeCanvas = inspRenderer.domElement;
+
+    function getCanvasRelativePosition(event) {
+      const rect = threeCanvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * threeCanvas.width  / rect.width,
+        y: (event.clientY - rect.top ) * threeCanvas.height / rect.height,
+      };
+    }
+
+    const inspectSelectors = ['#solarPanel', '#rotors', '#inspectInitial', '#body', '#legs']
+    const inspectCopyElements = inspectSelectors.map(selector => document.querySelector(selector))
+
+    const switchInspectCopyElements = elementId => {
+      const activeElement = inspectCopyElements.find(el => el.id === elementId)
+      const inactiveElements = inspectCopyElements.filter(el => el.id !== elementId)
+      activeElement.classList.add('inspectVisible')
+      inactiveElements.forEach(el => el.classList.remove('inspectVisible'))
+    }
+
+    const switchInspectObjects = object => {
+      if (!object) {
+        ingenuityMeshes.forEach(mesh => {mesh.material = inspHybridMat})
+        return
+        }
+
+      if (object === 'rotors') {
+        const rotorGroup = [rotor1, rotor1Base, rotor2, rotor2Base]
+        const otherMeshes = ingenuityMeshes.filter(mesh => !rotorGroup.includes(mesh))
+        rotorGroup.forEach(mesh => {mesh.material = inspHybridMat})
+        otherMeshes.forEach(mesh => {mesh.material = xRayMat})
+        return
       }
-    )
-    shadowMesh = new THREE.Mesh(shadowPlane, shadowMat)
-    shadowMesh.rotation.x = THREE.Math.degToRad(-90)
-    shadowMesh.position.y = -120
-    scene.add(shadowMesh)
 
+      const otherMeshes = ingenuityMeshes.filter(mesh => mesh.name !== object.name)
+      object.material = inspHybridMat
+      otherMeshes.forEach(mesh => {mesh.material = xRayMat})
+    }
 
-    //RENDERER
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
-    renderer.setPixelRatio(1)
-    renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
-    const container = document.getElementById( 'THREEContainer' )
-    container.appendChild(renderer.domElement)
+    // eslint-disable-next-line complexity
+    function checkIntersection() {
+      raycaster.setFromCamera( inspMouse, inspCamera )
+      const intersects = raycaster.intersectObject( inspIngenuityController, true )
+      if ( intersects.length > 0 ) {
+        let selectedObject = intersects[ 0 ].object;
+        if (!selectedObject.name) selectedObject = intersects[ 1 ].object
+        switch (selectedObject.name) {
+          case 'body':
+            switchInspectCopyElements('body')
+            switchInspectObjects(selectedObject)
+            break
+          case 'solarPanel':
+            switchInspectCopyElements('solarPanel')
+            switchInspectObjects(selectedObject)
+            break
+          case 'legs':
+            switchInspectCopyElements('legs')
+            switchInspectObjects(selectedObject)
+            break
+          case 'rotor1':
+          case 'rotor1Base':
+          case 'rotor2':
+          case 'rotor2Base':
+            switchInspectCopyElements('rotors')
+            switchInspectObjects('rotors')
+            break
+          default:
+            switchInspectCopyElements('inspectInitial')
+            switchInspectObjects(null)
+        }
+      } else {
+        switchInspectCopyElements('inspectInitial')
+        switchInspectObjects(null)
+      }
+    }
+
+    function setPickPosition(event) {
+      const pos = getCanvasRelativePosition(event);
+      inspMouse.x = (pos.x / threeCanvas.width ) *  2 - 1;
+      inspMouse.y = (pos.y / threeCanvas.height) * -2 + 1;  // note we flip Y
+
+      checkIntersection()
+    }
+
+    canvas.addEventListener('mouseenter', () => {
+      canvasMouse = true
+      window.addEventListener('pointermove', setPickPosition);
+    })
+
+    canvas.addEventListener('mouseleave', () => {
+      canvasMouse = false
+      switchInspectCopyElements('inspectInitial')
+      switchInspectObjects(null)
+      window.removeEventListener('pointermove', setPickPosition);
+    })
 
   }
 
+
+
   //EVENT LISTENERS
   function onWindowResize() {
-    camera.aspect = 720 / 480
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    // heroCamera.aspect = 720 / 480
+    heroCamera.aspect = window.innerWidth / (window.innerHeight * 0.8)
+    heroCamera.updateProjectionMatrix()
+    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
   }
   window.addEventListener('resize', onWindowResize, false)
 
@@ -204,7 +453,7 @@ gsap.registerPlugin(ScrollTrigger)
   document.addEventListener('mousemove', onDocumentMouseMove, false);
 
 
-  //INGENUITY FUNCTIONALITY
+  //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------
   let hoverHeight = {
     normal: 40,
     normalMax: 225,
@@ -220,24 +469,24 @@ gsap.registerPlugin(ScrollTrigger)
 
   const maxHorizontalPosition = 1000
   const updateHoverMousePosition = () => {
-    gsap.to(ingenuityController.position, { duration: 5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
-    gsap.to(dustMesh.position, { duration: 5.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
-    gsap.to(dustMesh2.position, { duration: 12, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(heroIngenuityController.position, { duration: 5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(heroDustMesh.position, { duration: 5.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(heroDustMesh2.position, { duration: 12, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
     gsap.to(hoverHeight, { duration: 5, ease: 'power2.out', mouseAmount: mouse.y * hoverHeight.mouseMax })
   }
 
   const updateHoverMouseRotation = () => {
-    const distance = (mouse.x * maxHorizontalPosition) - ingenuityController.position.x
-    ingenuityController.rotation.z = THREE.Math.degToRad(distance / -40)
+    const distance = (mouse.x * maxHorizontalPosition) - heroIngenuityController.position.x
+    heroIngenuityController.rotation.z = THREE.Math.degToRad(distance / -40)
   }
 
   const takeOff = () => {
     gsap.to(hoverHeight, { duration: 2, ease: 'power1.inOut', normal: hoverHeight.normalMax })
-    gsap.to(ingenuityController.rotation, { duration: 4, ease: 'back.inOut(4)', y: 0 })
+    gsap.to(heroIngenuityController.rotation, { duration: 4, ease: 'back.inOut(4)', y: 0 })
   }
 
   const hover = () => {
-    isHovering = true
+    isHeroHovering = true
     let isUp = false
     let amount = (Math.random() * hoverHeight.hoverMax) + hoverHeight.hoverMin
 
@@ -258,15 +507,68 @@ gsap.registerPlugin(ScrollTrigger)
 
   const updateCamera = () => {
     const maxRotation = 350
-    gsap.to(camera.rotation, { duration: 7, ease: 'power1.out', y: mouse.x * maxRotation * 0.001 * -1 })
+    gsap.to(heroCamera.rotation, { duration: 7, ease: 'power1.out', y: mouse.x * maxRotation * 0.001 * -1 })
   }
 
   const updateRotors = () => {
+    if (heroRotor1.rotation.y > 360) heroRotor1.rotation.y = 0
+    if (heroRotor2.rotation.y > 360) heroRotor2.rotation.y = 0
+    heroRotor1.rotation.y += 0.3
+    heroRotor2.rotation.y -= 0.4
+  }
+
+  //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------------
+
+
+
+
+
+  //INSP FUNCTIONALITY ----------------------------------------------------------------------------------------------------
+
+  let hoverAnim
+
+  const startHover = () => {
+    isInspHovering = true
+    hoverAnim = gsap.to(inspIngenuityController.position, { duration: 4, ease: 'back.inOut(4)', y: 200, repeat: -1, yoyo: true })
+  }
+
+  const alignCamera = () => {
+    inspCamera.lookAt(0, 340, 0)
+    inspCamera.updateProjectionMatrix()
+  }
+
+  const cameraZoomIn = () => {
+    zoomed = true
+    gsap.to(inspCamera, { duration: 0.75, ease: 'power1.out', fov: 24, onUpdate: () => alignCamera() })
+  }
+
+  const cameraZoomOut = () => {
+    zoomed = false
+    gsap.to(inspCamera, { duration: 0.5, ease: 'power1.out', fov: 46, onUpdate: () => alignCamera() })
+    gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', x: 250, onUpdate: () => alignCamera() })
+    gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', y: 440, onUpdate: () => alignCamera() })
+  }
+
+  const inspUpdateCamera = () => {
+    gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', x: 250 + inspMouse.x * 100, onUpdate: () => alignCamera() })
+    gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', y: 440 + inspMouse.y * 220, onUpdate: () => alignCamera() })
+  }
+
+  const rotors = {multiplier: 1}
+  const slowRotors = () => {gsap.to(rotors, { duration: 1.0, ease: 'power4.out', multiplier: 0.005 })}
+  const fastRotors = () => {gsap.to(rotors, { duration: 1, ease: 'power4.out', multiplier: 1 })}
+
+  const inspUpdateRotors = () => {
     if (rotor1.rotation.y > 360) rotor1.rotation.y = 0
     if (rotor2.rotation.y > 360) rotor2.rotation.y = 0
-    rotor1.rotation.y += 0.3
-    rotor2.rotation.y -= 0.4
+    rotor1.rotation.y += 0.3 * rotors.multiplier
+    rotor2.rotation.y -= 0.4 * rotors.multiplier
   }
+
+  const slowDust = () => {dustVideo.pause()}
+  const fastDust = () => {dustVideo.play()}
+
+  //INSP FUNCTIONALITY ----------------------------------------------------------------------------------------------------
 
   //POST-LOAD CONDITIONALS
 
@@ -274,19 +576,19 @@ gsap.registerPlugin(ScrollTrigger)
   let inFlight = false
 
   //UPDATE
-  const update = () => {
+  const heroUpdate = () => {
     if (modelReady && !startTakeOff) {
       setTimeout(() => {startTakeOff = true}, 1000)
       setTimeout(() => {inFlight = true}, 2000)
       takeOff()
-      if (!isHovering) hover()
+      if (!isHeroHovering) hover()
     }
 
-    ingenuityController.position.y = hoverHeight.currentX()
+    heroIngenuityController.position.y = hoverHeight.currentX()
 
     if (modelReady) {
-      shadowMesh.position.x = ingenuityController.position.x + -120
-      shadowMesh.position.z = hoverHeight.currentX() - 150
+      heroShadowMesh.position.x = heroIngenuityController.position.x + -120
+      heroShadowMesh.position.z = hoverHeight.currentX() - 150
       updateRotors()
     }
     if (modelReady && inFlight) {
@@ -297,14 +599,56 @@ gsap.registerPlugin(ScrollTrigger)
   }
 
   //RENDER LOOP
-  const render = () => renderer.render(scene, camera)
-  const renderLoop = () => {
-    if (isRendering) {
-      update()
-      modelReady && render()
-      requestAnimationFrame( renderLoop )
+  const heroRender = () => heroRenderer.render(heroScene, heroCamera)
+  const heroRenderLoop = () => {
+    if (isHeroRendering) {
+      heroUpdate()
+      modelReady && heroRender()
+      requestAnimationFrame( heroRenderLoop )
     }
   }
 
   init()
-  renderLoop()
+  heroRenderLoop()
+
+
+  //INSP LOOP --------------------------------------------------------------------------------------------------------------
+
+  //UPDATE
+  const inspUpdate = () => {
+
+    if (modelReady) {
+      if (!isInspHovering) startHover()
+      inspUpdateRotors()
+      if (canvasMouse) {
+        hoverAnim.pause()
+        inspUpdateCamera()
+        if (!zoomed) {
+          cameraZoomIn()
+          slowRotors()
+          slowDust()
+        }
+      } else {
+        hoverAnim.play()
+        if (zoomed) cameraZoomOut()
+        fastRotors()
+        fastDust()
+      }
+    }
+
+  }
+
+  //RENDER
+  const inspRender = () => inspRenderer.render(inspScene, inspCamera)
+
+  //RENDER LOOP
+  const inspRenderLoop = () => {
+    if (isInspRendering) {
+      inspUpdate()
+      inspRender()
+      requestAnimationFrame( inspRenderLoop )
+    }
+  }
+
+
+  // inspRenderLoop()
