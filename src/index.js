@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger)
   //VARIABLES
 
   let heroCamera, heroScene, heroRenderer
-  let ingenuityController, shadowMesh, dustMesh, dustMesh2
+  let heroIngenuityController, heroShadowMesh, heroDustMesh, heroDustMesh2
   let rotor1, rotor2
 
 
@@ -33,7 +33,7 @@ gsap.registerPlugin(ScrollTrigger)
   end: 'bottom top',
   onEnterBack: () => {
     isHeroRendering = true
-    renderLoop()
+    heroRenderLoop()
   },
   onLeave: () => {isHeroRendering = false},
   markers: false
@@ -90,10 +90,10 @@ gsap.registerPlugin(ScrollTrigger)
     })
 
     //GROUPS AND CONTROLLERS
-    ingenuityController = new THREE.Group()
-    heroScene.add(ingenuityController)
-    ingenuityController.rotation.y = 0.45
-    ingenuityController.position.y = 50
+    heroIngenuityController = new THREE.Group()
+    heroScene.add(heroIngenuityController)
+    heroIngenuityController.rotation.y = 0.45
+    heroIngenuityController.position.y = 50
 
 
 
@@ -110,7 +110,7 @@ gsap.registerPlugin(ScrollTrigger)
       model.scale.set(1.25, 1.25, 1.25)
       model.position.y = -50
       heroScene.add( model );
-      ingenuityController.add(model)
+      heroIngenuityController.add(model)
       model.traverse((o) => {
         if (o.isMesh) o.material = hybridMat;
         if (o.name === 'rotor1') rotor1 = o
@@ -141,19 +141,19 @@ gsap.registerPlugin(ScrollTrigger)
       }
     )
 
-    dustMesh = new THREE.Mesh(testPlane, videoMaterial)
-    dustMesh.position.y = 200
-    dustMesh.position.z = 200
-    dustMesh.rotation.y = THREE.Math.degToRad(0)
-    dustMesh.rotation.y = THREE.Math.degToRad(15)
-    heroScene.add(dustMesh)
+    heroDustMesh = new THREE.Mesh(testPlane, videoMaterial)
+    heroDustMesh.position.y = 200
+    heroDustMesh.position.z = 200
+    heroDustMesh.rotation.y = THREE.Math.degToRad(0)
+    heroDustMesh.rotation.y = THREE.Math.degToRad(15)
+    heroScene.add(heroDustMesh)
 
-    dustMesh2 = new THREE.Mesh(testPlane, videoMaterial)
-    dustMesh2.position.y = 200
-    dustMesh2.position.z = 200
-    dustMesh2.rotation.y = THREE.Math.degToRad(0)
-    dustMesh2.rotation.y = THREE.Math.degToRad(-15)
-    heroScene.add(dustMesh2)
+    heroDustMesh2 = new THREE.Mesh(testPlane, videoMaterial)
+    heroDustMesh2.position.y = 200
+    heroDustMesh2.position.z = 200
+    heroDustMesh2.rotation.y = THREE.Math.degToRad(0)
+    heroDustMesh2.rotation.y = THREE.Math.degToRad(-15)
+    heroScene.add(heroDustMesh2)
 
     const shadowPlane = new THREE.PlaneGeometry(1400, 1400, 10, 10)
     const shadowMat = new THREE.MeshBasicMaterial(
@@ -167,17 +167,17 @@ gsap.registerPlugin(ScrollTrigger)
         depthTest: false
       }
     )
-    shadowMesh = new THREE.Mesh(shadowPlane, shadowMat)
-    shadowMesh.rotation.x = THREE.Math.degToRad(-90)
-    shadowMesh.position.y = -120
-    heroScene.add(shadowMesh)
+    heroShadowMesh = new THREE.Mesh(shadowPlane, shadowMat)
+    heroShadowMesh.rotation.x = THREE.Math.degToRad(-90)
+    heroShadowMesh.position.y = -120
+    heroScene.add(heroShadowMesh)
 
 
     //RENDERER
     heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
     heroRenderer.setPixelRatio(1)
     heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
-    const container = document.getElementById( 'THREEContainer' )
+    const container = document.getElementById( 'THREEHeroContainer' )
     container.appendChild(heroRenderer.domElement)
 
   }
@@ -218,20 +218,20 @@ gsap.registerPlugin(ScrollTrigger)
 
   const maxHorizontalPosition = 1000
   const updateHoverMousePosition = () => {
-    gsap.to(ingenuityController.position, { duration: 5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
-    gsap.to(dustMesh.position, { duration: 5.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
-    gsap.to(dustMesh2.position, { duration: 12, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(heroIngenuityController.position, { duration: 5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(heroDustMesh.position, { duration: 5.5, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
+    gsap.to(heroDustMesh2.position, { duration: 12, ease: 'power2.out', x: mouse.x * maxHorizontalPosition })
     gsap.to(hoverHeight, { duration: 5, ease: 'power2.out', mouseAmount: mouse.y * hoverHeight.mouseMax })
   }
 
   const updateHoverMouseRotation = () => {
-    const distance = (mouse.x * maxHorizontalPosition) - ingenuityController.position.x
-    ingenuityController.rotation.z = THREE.Math.degToRad(distance / -40)
+    const distance = (mouse.x * maxHorizontalPosition) - heroIngenuityController.position.x
+    heroIngenuityController.rotation.z = THREE.Math.degToRad(distance / -40)
   }
 
   const takeOff = () => {
     gsap.to(hoverHeight, { duration: 2, ease: 'power1.inOut', normal: hoverHeight.normalMax })
-    gsap.to(ingenuityController.rotation, { duration: 4, ease: 'back.inOut(4)', y: 0 })
+    gsap.to(heroIngenuityController.rotation, { duration: 4, ease: 'back.inOut(4)', y: 0 })
   }
 
   const hover = () => {
@@ -266,7 +266,7 @@ gsap.registerPlugin(ScrollTrigger)
     rotor2.rotation.y -= 0.4
   }
 
-  //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------
+  //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------------
 
   //POST-LOAD CONDITIONALS
 
@@ -274,7 +274,7 @@ gsap.registerPlugin(ScrollTrigger)
   let inFlight = false
 
   //UPDATE
-  const update = () => {
+  const heroUpdate = () => {
     if (modelReady && !startTakeOff) {
       setTimeout(() => {startTakeOff = true}, 1000)
       setTimeout(() => {inFlight = true}, 2000)
@@ -282,11 +282,11 @@ gsap.registerPlugin(ScrollTrigger)
       if (!isHovering) hover()
     }
 
-    ingenuityController.position.y = hoverHeight.currentX()
+    heroIngenuityController.position.y = hoverHeight.currentX()
 
     if (modelReady) {
-      shadowMesh.position.x = ingenuityController.position.x + -120
-      shadowMesh.position.z = hoverHeight.currentX() - 150
+      heroShadowMesh.position.x = heroIngenuityController.position.x + -120
+      heroShadowMesh.position.z = hoverHeight.currentX() - 150
       updateRotors()
     }
     if (modelReady && inFlight) {
@@ -297,14 +297,14 @@ gsap.registerPlugin(ScrollTrigger)
   }
 
   //RENDER LOOP
-  const render = () => heroRenderer.render(heroScene, heroCamera)
-  const renderLoop = () => {
+  const heroRender = () => heroRenderer.render(heroScene, heroCamera)
+  const heroRenderLoop = () => {
     if (isHeroRendering) {
-      update()
-      modelReady && render()
-      requestAnimationFrame( renderLoop )
+      heroUpdate()
+      modelReady && heroRender()
+      requestAnimationFrame( heroRenderLoop )
     }
   }
 
   init()
-  renderLoop()
+  heroRenderLoop()
