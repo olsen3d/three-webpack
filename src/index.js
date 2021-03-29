@@ -15,14 +15,14 @@ gsap.registerPlugin(ScrollTrigger)
 
   //VARIABLES
 
-  let camera, scene, renderer
+  let heroCamera, heroScene, heroRenderer
   let ingenuityController, shadowMesh, dustMesh, dustMesh2
   let rotor1, rotor2
 
 
   //PRE-LOAD CONDITIONALS
 
-  let isRendering = true
+  let isHeroRendering = true
   let modelReady = false
   let isHovering = false
 
@@ -32,10 +32,10 @@ gsap.registerPlugin(ScrollTrigger)
   start: 'center top',
   end: 'bottom top',
   onEnterBack: () => {
-    isRendering = true
+    isHeroRendering = true
     renderLoop()
   },
-  onLeave: () => {isRendering = false},
+  onLeave: () => {isHeroRendering = false},
   markers: false
 })
 
@@ -44,17 +44,17 @@ gsap.registerPlugin(ScrollTrigger)
   function init() {
 
     //CAMERA
-    camera = new THREE.PerspectiveCamera(
+    heroCamera = new THREE.PerspectiveCamera(
       50, //65
       window.innerWidth / (window.innerHeight * 0.8),
       1,
-      240000
+      2400
     )
-    camera.position.set(0, 350, 1000)
-    camera.lookAt(0, 350, 0)
+    heroCamera.position.set(0, 350, 1000)
+    heroCamera.lookAt(0, 350, 0)
 
     //SCENE
-    scene = new THREE.Scene()
+    heroScene = new THREE.Scene()
 
 
 
@@ -69,9 +69,9 @@ gsap.registerPlugin(ScrollTrigger)
       '../static/textures/herobg1.jpg',
       () => {
         rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
-        rt.fromEquirectangularTexture(renderer, textureBG);
+        rt.fromEquirectangularTexture(heroRenderer, textureBG);
         hybridMat.envMap = rt
-        scene.background = rt;
+        heroScene.background = rt;
       }
       )
 
@@ -91,7 +91,7 @@ gsap.registerPlugin(ScrollTrigger)
 
     //GROUPS AND CONTROLLERS
     ingenuityController = new THREE.Group()
-    scene.add(ingenuityController)
+    heroScene.add(ingenuityController)
     ingenuityController.rotation.y = 0.45
     ingenuityController.position.y = 50
 
@@ -109,7 +109,7 @@ gsap.registerPlugin(ScrollTrigger)
       var model = gltf.scene;
       model.scale.set(1.25, 1.25, 1.25)
       model.position.y = -50
-      scene.add( model );
+      heroScene.add( model );
       ingenuityController.add(model)
       model.traverse((o) => {
         if (o.isMesh) o.material = hybridMat;
@@ -138,47 +138,47 @@ gsap.registerPlugin(ScrollTrigger)
         fog: false,
         depthWrite: false,
         depthTest: false
-      } );
+      }
+    )
 
     dustMesh = new THREE.Mesh(testPlane, videoMaterial)
     dustMesh.position.y = 200
     dustMesh.position.z = 200
     dustMesh.rotation.y = THREE.Math.degToRad(0)
     dustMesh.rotation.y = THREE.Math.degToRad(15)
-    scene.add(dustMesh)
+    heroScene.add(dustMesh)
 
     dustMesh2 = new THREE.Mesh(testPlane, videoMaterial)
     dustMesh2.position.y = 200
     dustMesh2.position.z = 200
     dustMesh2.rotation.y = THREE.Math.degToRad(0)
     dustMesh2.rotation.y = THREE.Math.degToRad(-15)
-    scene.add(dustMesh2)
+    heroScene.add(dustMesh2)
 
     const shadowPlane = new THREE.PlaneGeometry(1400, 1400, 10, 10)
     const shadowMat = new THREE.MeshBasicMaterial(
       {
         color: 0x000000,
         alphaMap: textureShadow,
-        opacity: 0.7
-        ,
+        opacity: 0.7,
         transparent: true,
         fog: false,
-        depthWrite: false, 
+        depthWrite: false,
         depthTest: false
       }
     )
     shadowMesh = new THREE.Mesh(shadowPlane, shadowMat)
     shadowMesh.rotation.x = THREE.Math.degToRad(-90)
     shadowMesh.position.y = -120
-    scene.add(shadowMesh)
+    heroScene.add(shadowMesh)
 
 
     //RENDERER
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
-    renderer.setPixelRatio(1)
-    renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+    heroRenderer.setPixelRatio(1)
+    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
     const container = document.getElementById( 'THREEContainer' )
-    container.appendChild(renderer.domElement)
+    container.appendChild(heroRenderer.domElement)
 
   }
 
@@ -186,9 +186,10 @@ gsap.registerPlugin(ScrollTrigger)
 
   //EVENT LISTENERS
   function onWindowResize() {
-    camera.aspect = 720 / 480
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    // heroCamera.aspect = 720 / 480
+    heroCamera.aspect = window.innerWidth / (window.innerHeight * 0.8)
+    heroCamera.updateProjectionMatrix()
+    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
   }
   window.addEventListener('resize', onWindowResize, false)
 
@@ -255,7 +256,7 @@ gsap.registerPlugin(ScrollTrigger)
 
   const updateCamera = () => {
     const maxRotation = 350
-    gsap.to(camera.rotation, { duration: 7, ease: 'power1.out', y: mouse.x * maxRotation * 0.001 * -1 })
+    gsap.to(heroCamera.rotation, { duration: 7, ease: 'power1.out', y: mouse.x * maxRotation * 0.001 * -1 })
   }
 
   const updateRotors = () => {
@@ -296,9 +297,9 @@ gsap.registerPlugin(ScrollTrigger)
   }
 
   //RENDER LOOP
-  const render = () => renderer.render(scene, camera)
+  const render = () => heroRenderer.render(heroScene, heroCamera)
   const renderLoop = () => {
-    if (isRendering) {
+    if (isHeroRendering) {
       update()
       modelReady && render()
       requestAnimationFrame( renderLoop )
