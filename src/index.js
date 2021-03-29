@@ -23,6 +23,7 @@ gsap.registerPlugin(ScrollTrigger)
 
   let inspCamera, inspScene, inspRenderer
   let inspIngenuityController
+  let heroRotor1, heroRotor2
   let rotor1, rotor2, rotor1Base, rotor2Base, dustMesh, dustMesh2
   const ingenuityMeshes = []
 
@@ -249,10 +250,8 @@ ScrollTrigger.create({
         if (o.isMesh) {
           o.material = hybridMat
         }
-        if (o.name === 'rotor1') rotor1 = o
-        if (o.name === 'rotor1Base') rotor1Base = o
-        if (o.name === 'rotor2') rotor2 = o
-        if (o.name === 'rotor2Base') rotor2Base = o
+        if (o.name === 'rotor1') heroRotor1 = o
+        if (o.name === 'rotor2') heroRotor2 = o
       })
       model2.traverse((o) => {
         if (o.isMesh) {
@@ -512,10 +511,10 @@ ScrollTrigger.create({
   }
 
   const updateRotors = () => {
-    if (rotor1.rotation.y > 360) rotor1.rotation.y = 0
-    if (rotor2.rotation.y > 360) rotor2.rotation.y = 0
-    rotor1.rotation.y += 0.3
-    rotor2.rotation.y -= 0.4
+    if (heroRotor1.rotation.y > 360) heroRotor1.rotation.y = 0
+    if (heroRotor2.rotation.y > 360) heroRotor2.rotation.y = 0
+    heroRotor1.rotation.y += 0.3
+    heroRotor2.rotation.y -= 0.4
   }
 
   //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------------
