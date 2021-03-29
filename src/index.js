@@ -3,8 +3,6 @@
 /* eslint-disable no-inner-declarations */
 /* eslint-disable max-statements */
 import * as THREE from 'three'
-import { WEBGL } from './webgl'
-import Stats from 'three/examples/jsm/libs/stats.module.js'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js'
 import gsap from 'gsap'
@@ -13,13 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 //DEBUG
 
-const statsFPS = new Stats()
-statsFPS.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( statsFPS.dom )
-
 //MAIN
-
-if (WEBGL.isWebGLAvailable()) {
 
   //VARIABLES
 
@@ -44,7 +36,7 @@ if (WEBGL.isWebGLAvailable()) {
     renderLoop()
   },
   onLeave: () => {isRendering = false},
-  markers: true
+  markers: false
 })
 
   //INITIALIZE THREE
@@ -64,14 +56,6 @@ if (WEBGL.isWebGLAvailable()) {
     //SCENE
     scene = new THREE.Scene()
 
-    //FOG
-    {
-      const near = -50000;
-      const far = 220000;
-      const color = 0xd9c6bb;
-      scene.fog = new THREE.Fog(color, near, far);
-    }
-
 
 
 
@@ -82,7 +66,7 @@ if (WEBGL.isWebGLAvailable()) {
     const loaderTEXTURE = new THREE.TextureLoader();
 
     const textureBG = loaderTEXTURE.load(
-      '../static/textures/bgInspect.jpg',
+      '../static/textures/herobg1.jpg',
       () => {
         rt = new THREE.WebGLCubeRenderTarget(textureBG.image.height);
         rt.fromEquirectangularTexture(renderer, textureBG);
@@ -143,32 +127,15 @@ if (WEBGL.isWebGLAvailable()) {
       console.error( error );
     } )
 
-    //TERRAIN
-    loaderGLTF.load( '../static/models/terrainDraco2.gltf', function ( gltf ) {
-      var terrain = gltf.scene;
-      terrain.matrixAutoUpdate = false
-      terrain.scale.set(1.25, 1.25, 1.25)
-      terrain.position.y = 0
-      terrain.traverse((o) => {
-        if (o.isMesh) o.material = terrainMat;
-        // if (o.isMesh) o.material = new THREE.MeshNormalMaterial()
-      });
-      scene.add( terrain );
-    }, undefined, function ( error ) {
-      console.error( error );
-    } )
-
 
     const testPlane = new THREE.PlaneGeometry(1000, 300, 0)
 
     const video = document.getElementById('video')
     video.play()
     const videoTexture = new THREE.VideoTexture(video);
-    //80593c
-    //9f7248
+
     const videoMaterial =  new THREE.MeshBasicMaterial(
       {
-        // color: 0x9f7248,
         map: textureDust,
         alphaMap: videoTexture,
         opacity: 0.75,
@@ -178,7 +145,6 @@ if (WEBGL.isWebGLAvailable()) {
         depthTest: false
       } );
 
-    const testMat = new THREE.MeshNormalMaterial()
     dustMesh = new THREE.Mesh(testPlane, videoMaterial)
     dustMesh.position.y = 200
     dustMesh.position.z = 200
@@ -218,9 +184,6 @@ if (WEBGL.isWebGLAvailable()) {
     renderer.setSize(window.innerWidth, window.innerHeight * 0.8)
     const container = document.getElementById( 'THREEContainer' )
     container.appendChild(renderer.domElement)
-
-    // scene.overrideMaterial = new THREE.MeshNormalMaterial({wireframe: true})
-    //window.devicePixelRatio for high res displays
 
   }
 
@@ -301,8 +264,8 @@ if (WEBGL.isWebGLAvailable()) {
   const updateRotors = () => {
     if (rotor1.rotation.y > 360) rotor1.rotation.y = 0
     if (rotor2.rotation.y > 360) rotor2.rotation.y = 0
-    rotor1.rotation.y += 0.3 //0.3
-    rotor2.rotation.y -= 0.4 //0.4
+    rotor1.rotation.y += 0.3
+    rotor2.rotation.y -= 0.4
   }
 
   //POST-LOAD CONDITIONALS
@@ -323,7 +286,6 @@ if (WEBGL.isWebGLAvailable()) {
 
     if (modelReady) {
       shadowMesh.position.x = ingenuityController.position.x + -120
-      // dustMesh.position.x = ingenuityController.position.x
       shadowMesh.position.z = hoverHeight.currentX() - 150
       updateRotors()
     }
@@ -338,18 +300,11 @@ if (WEBGL.isWebGLAvailable()) {
   const render = () => renderer.render(scene, camera)
   const renderLoop = () => {
     if (isRendering) {
-      statsFPS.begin()
       update()
-      render()
-      statsFPS.end()
+      modelReady && render()
       requestAnimationFrame( renderLoop )
     }
   }
 
   init()
   renderLoop()
-
-} else {
-  var warning = WEBGL.getWebGLErrorMessage()
-  document.body.appendChild(warning)
-}
