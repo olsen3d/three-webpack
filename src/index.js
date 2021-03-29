@@ -61,7 +61,7 @@ gsap.registerPlugin(ScrollTrigger)
 
     //MATERIALS AND TEXTURES LOADERS
 
-    let rt, hybridMat, terrainMat
+    let rt, hybridMat
 
     const loaderTEXTURE = new THREE.TextureLoader();
 
@@ -76,14 +76,9 @@ gsap.registerPlugin(ScrollTrigger)
       )
 
     const textureINGENUITY = loaderTEXTURE.load('../static/textures/INGENUITY_TEXTURE_BAKED_02.jpg')
-    const textureROCKS = loaderTEXTURE.load('../static/textures/TERRAIN_TEXTURE_03.jpg')
     const textureShadow = loaderTEXTURE.load('../static/textures/shadowMask4.jpg')
     const textureDust = loaderTEXTURE.load('../static/textures/dust.jpg')
 
-    terrainMat = new THREE.MeshBasicMaterial({
-      map: textureROCKS,
-      fog: true
-    })
 
     hybridMat = new THREE.MeshBasicMaterial({
       color: 0xeeeeee,
@@ -130,7 +125,7 @@ gsap.registerPlugin(ScrollTrigger)
 
     const testPlane = new THREE.PlaneGeometry(1000, 300, 0)
 
-    const video = document.getElementById('video')
+    const video = document.getElementById('dustVideo')
     video.play()
     const videoTexture = new THREE.VideoTexture(video);
 
@@ -187,6 +182,8 @@ gsap.registerPlugin(ScrollTrigger)
 
   }
 
+
+
   //EVENT LISTENERS
   function onWindowResize() {
     camera.aspect = 720 / 480
@@ -204,7 +201,7 @@ gsap.registerPlugin(ScrollTrigger)
   document.addEventListener('mousemove', onDocumentMouseMove, false);
 
 
-  //INGENUITY FUNCTIONALITY
+  //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------
   let hoverHeight = {
     normal: 40,
     normalMax: 225,
@@ -267,6 +264,8 @@ gsap.registerPlugin(ScrollTrigger)
     rotor1.rotation.y += 0.3
     rotor2.rotation.y -= 0.4
   }
+
+  //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------
 
   //POST-LOAD CONDITIONALS
 

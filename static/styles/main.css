@@ -16,9 +16,8 @@
 }
 
 body { 
-  font-family: monospace;
   margin: 0; 
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: normal;
   background-color: #222;
 }
@@ -74,4 +73,90 @@ p {
 .infoArea2 {
   background-color: #222;
   height: 100vh;
+}
+
+
+.sectionContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  padding: 0 10%;
+  align-items: center;
+}
+
+#inspectContainer {
+  background-color: #222;
+  display: flex;
+  flex-direction: row;
+}
+
+#THREEInspContainer {
+  position: relative;
+  z-index: 99;
+  padding: 0;
+  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
+}
+
+#inspMagnify {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: #222;
+  padding: 16px;
+  border-radius: 28px;
+}
+
+#THREEInspWindow {
+  width: 600px;
+  height: 500px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+#inspectTextArea {
+  width: 40vw;
+  padding: 0 1rem;
+}
+
+H3 {
+  font-family: header;
+  color: white;
+  font-size: 1.75rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.inspectCopy {
+  padding: 0 1rem;
+  font-family: copy;
+  color: #ddd;
+  font-size: 1rem;
+  border-left: solid #ddd 3px;
+  word-break: break-word;
+  overflow: hidden;
+}
+
+b {
+  color: #fff;
+  font-family: copyBold;
+}
+
+.inspectCard {
+  width: 40vw;
+  position: absolute;
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.inspectHidden {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.inspectVisible {
+  opacity: 1;
+  transform: translateX(0px);
+  transition: opacity 900ms, transform 900ms;
 }
