@@ -571,8 +571,8 @@ gsap.registerPlugin(ScrollTrigger)
     }
   }
 
-  // init()
-  // heroRenderLoop()
+  init()
+  heroRenderLoop()
 
 
   //INSP LOOP --------------------------------------------------------------------------------------------------------------

@@ -57,6 +57,9 @@ p {
   justify-content: center;
   align-items: center;
   margin: 0 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #2a2a2a;
 }
 
 .header {
@@ -116,6 +119,12 @@ p {
   font-size: 1rem;
   word-break: break-word;
   overflow: hidden;
+}
+
+li {
+  font-family: copy;
+  color: #ddd;
+  font-size: 1rem;
 }
 
 
@@ -183,6 +192,14 @@ H3 {
   color: white;
   font-size: 1.75rem;
   margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+H4 {
+  font-family: header;
+  color: white;
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
 }
 
