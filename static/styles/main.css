@@ -17,9 +17,12 @@
 
 body { 
   margin: 0; 
+  padding: 0;
   font-size: 1rem;
   font-weight: normal;
   background-color: #222;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 
@@ -35,7 +38,25 @@ p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: crosshair;
+  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
+}
+
+#stepsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-top: 12%;
+}
+
+.stepsCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 2rem;
 }
 
 .header {
@@ -54,7 +75,7 @@ p {
 
 #THREEHeroContainer {
   position: relative;
-  cursor: crosshair;
+  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
   height: 80vh;
   top: 10vh;
 }
@@ -75,13 +96,37 @@ p {
   height: 100vh;
 }
 
+#heroSection {
+  height: 100vh;
+  width: 100vw;
+}
 
-.sectionContainer {
+#futureSection {
   height: 100vh;
   width: 100vw;
   display: flex;
-  padding: 0 10%;
+  flex-direction: column;
   align-items: center;
+  padding-top: 20%;
+}
+
+.futureCopy {
+  font-family: copy;
+  color: #ddd;
+  font-size: 1rem;
+  word-break: break-word;
+  overflow: hidden;
+}
+
+
+
+.sectionCenterContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  /* padding: 0 10%; */
+  align-items: center;
+  justify-content: center;
 }
 
 #inspectContainer {
@@ -97,7 +142,7 @@ p {
   cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
 }
 
-#inspMagnify {
+.threeIcon {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -105,6 +150,12 @@ p {
   background-color: #222;
   padding: 16px;
   border-radius: 28px;
+}
+
+.inspIcon {
+  float: left;
+  height: 2rem;
+  padding: 0.25rem 0.5rem;
 }
 
 #THREEInspWindow {
@@ -116,7 +167,15 @@ p {
 
 #inspectTextArea {
   width: 40vw;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
+}
+
+H2 {
+  font-family: header;
+  color: white;
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 H3 {
@@ -128,13 +187,14 @@ H3 {
 }
 
 .inspectCopy {
-  padding: 0 1rem;
+  padding: 0 1.5rem;
   font-family: copy;
   color: #ddd;
   font-size: 1rem;
   border-left: solid #ddd 3px;
   word-break: break-word;
   overflow: hidden;
+  margin-left: 1.25rem;
 }
 
 b {

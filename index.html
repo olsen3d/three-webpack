@@ -8,26 +8,68 @@
     <title>Three testing</title>
   </head>
   <body>
+    <section id=heroSection>
       <div id="THREEHeroContainer">
-        <img id='inspMagnify' src='static/icons/magnify.png' alt='magnify' width='30' height='30'>
+        <img class='threeIcon' src='static/icons/arrows.png' alt='arrows' width='30' height='30'>
       </div>
-        <div id='headerContainer'>
-          <h1 class="header">INGENUITY</h1>
+      <div id='headerContainer'>
+        <h1 class="header">INGENUITY</h1>
+      </div>
+    </section>
+    <section id='futureSection'>
+      <H2>THE FIRST FLIGHT ON ANOTHER PLANET</H2>
+      <div id='stepsContainer'>
+        <div class='stepsCard'>
+          <H3>DEMONSTRATION</H3>
+          <p class="futureCopy">
+            This project seeks to test a new capability for the first time, with limited scope. 
+            <br>
+            <br>
+            "The ingenuity and brilliance of people working hard to overcome the challenges of interplanetary travel are what allow us all to experience the wonders of space exploration," Rupani wrote. "Ingenuity is what allows people to accomplish amazing things."
+            -High school student Vaneeza Rupani of Northport, Alabama
+
+          </p>
+        </div>
+        <div class='stepsCard'>
+          <H3>MILESTONES</H3>
+          <p class="futureCopy">
+            Surviving the launch from Cape Canaveral, the cruise to Mars, and landing on the Red Planet
+            <br>
+            <br>
+            Safely deploying to the surface from Perseverance's belly
+            <br>
+            <br>
+            Autonomously keeping warm through the intensely cold Martian nights
+            <br>
+            <br>
+            Autonomously charging itself with its solar panel
+            <br>
+            <br>
+            And then Ingenuity will make its first flight attempt. If the helicopter succeeds in that first flight, the Ingenuity team will attempt up to four other test flights within a 30-Martian-day (31-Earth-day) window.
+
+          </p>
+        </div>
+        <div class='stepsCard'>
+          <H3>FUTURE</H3>
+          <p class='futureCopy'>
+            Ingenuity is intended to demonstrate technologies needed for flying in the Martian atmosphere. 
+            <br>
+            <br>
+            If successful, these technologies could enable other advanced robotic flying vehicles that might be included in future robotic and human missions to Mars. They could offer a unique viewpoint not provided by current orbiters high overhead or by rovers and landers on the ground, provide high-definition images and reconnaissance for robots or humans, and enable access to terrain that is difficult for rovers to reach.
+          </p>
         </div>
       </div>
-    <section class='infoArea'></section>
-    <section class='sectionContainer'>
-      some content here
     </section>
-    <section id='inspectSection' class="sectionContainer">
+    <section id='inspectSection' class="sectionCenterContainer">
       <div id="inspectContainer">
         <div id="THREEInspContainer">
-          <img id='inspMagnify' src='static/icons/magnify.png' alt='magnify' width='30' height='30'>
+          <img class='threeIcon' src='static/icons/magnify.png' alt='magnify' width='30' height='30'>
           <div id='THREEInspWindow'></div>
         </div>
         <div id="inspectTextArea">
 
           <div id="inspectInitial" class='inspectCard inspectVisible'>
+            <img class='inspIcon' src='static/icons/dimensions.png' alt='dimensions'>
             <H3>DIMENSIONS</H3>
             <p class="inspectCopy">
               <b>Height:</b> 1.6 feet (0.49 meters)
@@ -35,6 +77,7 @@
               <br>
               <b>Weight:</b> About 4.0 pounds (1.8 kilograms) on Earth, and about 1.5 pounds (0.68 kilograms) on Mars
             </p>
+            <img class='inspIcon' src='static/icons/cpu.png' alt='cpu'>
             <H3>ELECTRONICS</H3>
             <p class="inspectCopy">
               <b>CPU:</b> Snapdragon processor with a Linux operating system performs high-level functions on the helicopter. The Snapdragon processor has a 2.26 GHz Quad-core 801 processor with 2 GB Random Access Memory (RAM), 32 GB Flash memory
@@ -52,6 +95,7 @@
           </div>
 
           <div id="solarPanel" class='inspectCard'>
+            <img class='inspIcon' src='static/icons/power.png' alt='power'>
             <H3>SOLAR CELLS</H3>
             <p class="inspectCopy">
               Ingenuity is powered by a six lithium-ion battery 
@@ -64,6 +108,7 @@
               flight operations. Power expended by the helicopter 
               during an up-to-90-second flight is about 350 watts.
             </p>
+            <img class='inspIcon' src='static/icons/communications.png' alt='communications'>
             <H3>Communications</H3>
             <p class="inspectCopy">
               Communication delays are an inherent part of working with spacecraft across interplanetary distances. Commands will need to be sent well in advance, with engineering data coming back from the spacecraft long after each flight takes place. In the meantime, Ingenuity will have a lot of autonomy to make its own decisions about how to fly to a waypoint.
@@ -73,6 +118,7 @@
           </div>
 
           <div id="rotors" class='inspectCard'>
+            <img class='inspIcon' src='static/icons/rotor.png' alt='rotor'>
             <H3>ROTOR SYSTEM</H3>
             <p class="inspectCopy">
               Features four specially made carbon-fiber blades, arranged into two rotors that spin in opposite directions at around 2,400 rpm – many times faster than a passenger helicopter on Earth.
@@ -80,6 +126,7 @@
               <br>
               Mars' thin atmosphere makes it difficult to achieve enough lift. Because the Mars atmosphere is 99% less dense than Earth's, Ingenuity has to be light, with rotor blades that are much larger and spin much faster than what would be required for a helicopter of Ingenuity's mass on Earth.
             </p>
+            <img class='inspIcon' src='static/icons/flight.png' alt='flight'>
             <H3>FLIGHT</H3>
             <p class="inspectCopy">
               The helicopter will fly at altitudes of 10-15 feet (3-5 meters) in altitude and travel as far as 160 feet (50 meters) downrange and back to the starting area.
@@ -91,11 +138,13 @@
           </div>
 
           <div id="body" class='inspectCard'>
+            <img class='inspIcon' src='static/icons/body.png' alt='body'>
             <H3>FUELSELAGE</H3>
             <p class="inspectCopy">
               Mars has beyond bone-chilling temperatures, with nights as cold as minus 130 degrees Fahrenheit (minus 90 degrees Celsius) at Jezero Crater.
               The helicopter uses solar cells to recharge its batteries, of which majority of it is used to stay warm on cold Martian nights with the temperature falling to minus 130 degrees F
             </p>
+            <img class='inspIcon' src='static/icons/camera.png' alt='camera'>
             <H3>CAMERAS</H3>
             <p class="inspectCopy">
               <b>NAV (Navigation):</b> global-shutter, nadir pointed grayscale 640 by 480 pixel sensor mounted to a Sunny optics module. It has a field-of-view (FOV) of 133 deg (horizontal) by 100 deg (vertical) and is capable of acquiring images at 10 frames/sec. Visual features are extracted from the images and tracked from frame to frame to provide a velocity estimate.
@@ -106,6 +155,7 @@
           </div>
 
           <div id="legs" class='inspectCard'>
+            <img class='inspIcon' src='static/icons/landing.png' alt='landing'>
             <H3>LANDING SYSTEM</H3>
             <p class="inspectCopy">
               The landing system consists of 4 legs made of tapered carbon fiber/epoxy tubes. The feet are designed to prevent the leg from digging into soft landing surfaces. They also provide some damping by scrubbing against the ground as the leg flexes. Additional energy absorption is provided by flexible deforming elements at the hinges connecting the legs to the landing gear mounting plate which is affixed to the mast. The leg designs are tested against a variety of Martian surfaces 14 ranging from hard rock to deep sand.

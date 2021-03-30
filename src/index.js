@@ -49,39 +49,6 @@ gsap.registerPlugin(ScrollTrigger)
   let isInspHovering = false
   let zoomed = false
 
-  //SCROLLTRIGGERS
-
-  ScrollTrigger.create({
-  id: 'heroTHREE',
-  trigger: '#THREEHeroContainer',
-  start: 'center bottom',
-  end: 'bottom top',
-  onEnterBack: () => {
-    isHeroRendering = true
-    heroRenderLoop()
-  },
-  onLeave: () => {isHeroRendering = false},
-  markers: false
-})
-
-ScrollTrigger.create({
-  id: 'inspTHREE',
-  trigger: '#inspectSection',
-  start: 'top center',
-  end: 'bottom center',
-  onEnter: () => {
-    isInspRendering = true
-    inspRenderLoop()
-  },
-  onEnterBack: () => {
-    isInspRendering = true
-    inspRenderLoop()
-  },
-  onLeave: () => {isInspRendering = false},
-  onLeaveBack: () => {isInspRendering = false},
-  markers: false
-})
-
   //INITIALIZE THREE
 
   function init() {
@@ -311,15 +278,11 @@ ScrollTrigger.create({
 
 
 
-
-
-
-
     //RENDERERS
 
     heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
     heroRenderer.setPixelRatio(1)
-    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    heroRenderer.setSize(document.body.clientWidth, window.innerHeight * 0.8)
     const heroContainer = document.getElementById( 'THREEHeroContainer' )
     heroContainer.appendChild(heroRenderer.domElement)
 
@@ -438,16 +401,16 @@ ScrollTrigger.create({
   //EVENT LISTENERS
   function onWindowResize() {
     // heroCamera.aspect = 720 / 480
-    heroCamera.aspect = window.innerWidth / (window.innerHeight * 0.8)
+    heroCamera.aspect = document.body.clientWidth / (window.innerHeight * 0.8)
     heroCamera.updateProjectionMatrix()
-    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    heroRenderer.setSize(document.body.clientWidth, window.innerHeight * 0.8)
   }
   window.addEventListener('resize', onWindowResize, false)
 
   const mouse = new THREE.Vector2()
   function onDocumentMouseMove(event) {
     event.preventDefault();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.x = (event.clientX / document.body.clientWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
   document.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -587,8 +550,8 @@ ScrollTrigger.create({
     heroIngenuityController.position.y = hoverHeight.currentX()
 
     if (modelReady) {
-      heroShadowMesh.position.x = heroIngenuityController.position.x + -120
-      heroShadowMesh.position.z = hoverHeight.currentX() - 150
+      heroShadowMesh.position.x = heroIngenuityController.position.x + -150
+      heroShadowMesh.position.z = hoverHeight.currentX() - 250
       updateRotors()
     }
     if (modelReady && inFlight) {
@@ -608,8 +571,8 @@ ScrollTrigger.create({
     }
   }
 
-  init()
-  heroRenderLoop()
+  // init()
+  // heroRenderLoop()
 
 
   //INSP LOOP --------------------------------------------------------------------------------------------------------------
@@ -652,3 +615,43 @@ ScrollTrigger.create({
 
 
   // inspRenderLoop()
+
+
+  //SCROLLTRIGGERS
+
+  ScrollTrigger.create({
+    id: 'heroTHREE',
+    trigger: '#THREEHeroContainer',
+    start: 'center bottom',
+    end: 'bottom top',
+    onEnterBack: () => {
+      isHeroRendering = true
+      heroRenderLoop()
+    },
+    onLeave: () => {isHeroRendering = false},
+    markers: false
+  })
+
+  ScrollTrigger.create({
+    id: 'inspTHREE',
+    trigger: '#inspectSection',
+    start: 'top center',
+    end: 'bottom center',
+    onEnter: () => {
+      isInspRendering = true
+      inspRenderLoop()
+      isHeroRendering = false
+    },
+    onEnterBack: () => {
+      isInspRendering = true
+      inspRenderLoop()
+      isHeroRendering = false
+    },
+    onLeave: () => {
+      isInspRendering = false
+    },
+    onLeaveBack: () => {
+      isInspRendering = false
+    },
+    markers: false
+  })
