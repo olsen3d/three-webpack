@@ -655,3 +655,39 @@ gsap.registerPlugin(ScrollTrigger)
     },
     markers: false
   })
+
+  gsap.to('#steps1', {
+    scrollTrigger: {
+      trigger: '#steps1',
+      toggleActions: 'play reset play reset'
+    },
+    y: 125,
+    opacity: 1,
+    duration: 1.5,
+    delay: 0,
+    markers: true
+  })
+
+  gsap.to('#steps2', {
+    scrollTrigger: {
+      trigger: '#steps2',
+      toggleActions: 'play reset play reset'
+    },
+    y: 125,
+    opacity: 1,
+    duration: 1.5,
+    delay: 1,
+    markers: true
+  })
+
+  gsap.to('#steps3', {
+    scrollTrigger: {
+      trigger: '#steps3',
+      toggleActions: 'play reset play reset'
+    },
+    y: 125,
+    opacity: 1,
+    duration: 1.5,
+    delay: 2,
+    markers: true
+  })

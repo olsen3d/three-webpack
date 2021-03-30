@@ -60,6 +60,7 @@ p {
   padding: 1rem;
   border-radius: 1rem;
   background-color: #2a2a2a;
+  opacity: 0;
 }
 
 .header {
