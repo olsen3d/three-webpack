@@ -238,3 +238,81 @@ b {
   transform: translateX(0px);
   transition: opacity 900ms, transform 900ms;
 }
+
+.regularFont {
+  font-family: copyBold;
+}
+
+.lightFont {
+  font-family: copy;
+}
+
+.largeFont {
+  font-size: 1.5rem;
+}
+
+.mediumLargeFont {
+  font-size: 1.25rem;
+}
+
+#footerContainer {
+  color: #fff;
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0 10%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerFooter {
+  font-family: 'header';
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 1.5rem;
+  color: #fff;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid #cccccc;
+  margin: 0 0 0.5rem 0;
+}
+
+.spacer {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.smallSpacer {
+  margin-top: 0.2rem;
+}
+
+.linkFooter {
+  color: white;
+  text-decoration: none;
+}
+.linkFooter:hover {
+  text-decoration: underline;
+}
+.linkFooter:visited {
+  color: white;
+  text-decoration: none;
+}
+
+.footerText {
+  margin: 0 3rem;
+}
+
+#bottomImgContainer {
+  display: flex;
+}
+
+#bottomImg {
+  align-self: flex-end;
+  height: 175px;
+}
