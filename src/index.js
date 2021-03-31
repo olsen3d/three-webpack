@@ -401,16 +401,16 @@ gsap.registerPlugin(ScrollTrigger)
   //EVENT LISTENERS
   function onWindowResize() {
     // heroCamera.aspect = 720 / 480
-    heroCamera.aspect = document.body.clientWidth / (window.innerHeight * 0.8)
+    heroCamera.aspect = window.innerWidth / (window.innerHeight * 0.8)
     heroCamera.updateProjectionMatrix()
-    heroRenderer.setSize(document.body.clientWidth, window.innerHeight * 0.8)
+    heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
   }
   window.addEventListener('resize', onWindowResize, false)
 
   const mouse = new THREE.Vector2()
   function onDocumentMouseMove(event) {
     event.preventDefault();
-    mouse.x = (event.clientX / document.body.clientWidth) * 2 - 1;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
   document.addEventListener('mousemove', onDocumentMouseMove, false);
