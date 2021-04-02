@@ -8,10 +8,13 @@ import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader.js'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+gsap.registerPlugin(ScrollToPlugin)
 
 //DEBUG
 
 //MAIN
+
 
   //HERO VARIABLES
 
@@ -33,6 +36,8 @@ gsap.registerPlugin(ScrollTrigger)
   dustVideo.play()
 
   const canvas = document.querySelector('#THREEInspContainer')
+  const heroContainer = document.getElementById( 'THREEHeroContainer' )
+  const inspContainer = document.getElementById( 'THREEInspWindow' )
   let canvasMouse = false
 
 
@@ -74,15 +79,15 @@ gsap.registerPlugin(ScrollTrigger)
     heroCamera.lookAt(0, 350, 0)
 
     inspCamera = new THREE.PerspectiveCamera(
-      46, //42
-      700 / 600,
+      50, //42
+      inspContainer.clientWidth / inspContainer.clientHeight,
       1,
       5000
     )
     inspCamera.position.set(250, 340, 500)
     inspCamera.lookAt(0, 340, 0)
 
-
+    console.log(inspCamera)
 
 
     //GROUPS AND CONTROLLERS
@@ -283,13 +288,12 @@ gsap.registerPlugin(ScrollTrigger)
     heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
     heroRenderer.setPixelRatio(1)
     heroRenderer.setSize(document.body.clientWidth, window.innerHeight * 0.8)
-    const heroContainer = document.getElementById( 'THREEHeroContainer' )
     heroContainer.appendChild(heroRenderer.domElement)
+    heroRenderer.domElement.id = 'threeHero'
 
     inspRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
     inspRenderer.setPixelRatio(1)
-    inspRenderer.setSize(600, 500)
-    const inspContainer = document.getElementById( 'THREEInspWindow' )
+    inspRenderer.setSize(inspContainer.clientWidth, inspContainer.clientHeight)
     inspContainer.appendChild(inspRenderer.domElement)
 
 
@@ -385,14 +389,18 @@ gsap.registerPlugin(ScrollTrigger)
     canvas.addEventListener('mouseenter', () => {
       canvasMouse = true
       window.addEventListener('pointermove', setPickPosition);
+      window.addEventListener('pointerdown', setPickPosition);
     })
+
 
     canvas.addEventListener('mouseleave', () => {
       canvasMouse = false
       switchInspectCopyElements('inspectInitial')
       switchInspectObjects(null)
       window.removeEventListener('pointermove', setPickPosition);
+      window.removeEventListener('pointerdown', setPickPosition);
     })
+
 
   }
 
@@ -400,10 +408,20 @@ gsap.registerPlugin(ScrollTrigger)
 
   //EVENT LISTENERS
   function onWindowResize() {
-    // heroCamera.aspect = 720 / 480
+    const hero = document.querySelector('#threeHero')
+    hero.remove()
     heroCamera.aspect = window.innerWidth / (window.innerHeight * 0.8)
     heroCamera.updateProjectionMatrix()
     heroRenderer.setSize(window.innerWidth, window.innerHeight * 0.8)
+    heroContainer.appendChild(heroRenderer.domElement)
+    heroRenderer.domElement.id = 'threeHero'
+
+    inspContainer.childNodes[0] && inspContainer.childNodes[0].remove()
+    inspCamera.aspect = inspContainer.clientWidth / inspContainer.clientHeight
+    inspCamera.updateProjectionMatrix()
+    inspRenderer.setSize(inspContainer.clientWidth, inspContainer.clientHeight)
+    
+    inspContainer.appendChild(inspRenderer.domElement)
   }
   window.addEventListener('resize', onWindowResize, false)
 
@@ -502,14 +520,14 @@ gsap.registerPlugin(ScrollTrigger)
 
   const cameraZoomIn = () => {
     zoomed = true
-    gsap.to(inspCamera, { duration: 0.75, ease: 'power1.out', fov: 24, onUpdate: () => alignCamera() })
+    gsap.to(inspCamera, { duration: 0.75, ease: 'power1.out', fov: 22, onUpdate: () => alignCamera() })
   }
 
   const cameraZoomOut = () => {
     zoomed = false
-    gsap.to(inspCamera, { duration: 0.5, ease: 'power1.out', fov: 46, onUpdate: () => alignCamera() })
+    gsap.to(inspCamera, { duration: 0.5, ease: 'power1.out', fov: 50, onUpdate: () => alignCamera() })
     gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', x: 250, onUpdate: () => alignCamera() })
-    gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', y: 440, onUpdate: () => alignCamera() })
+    gsap.to(inspCamera.position, { duration: 1.5, ease: 'power1.out', y: 340, onUpdate: () => alignCamera() })
   }
 
   const inspUpdateCamera = () => {
@@ -665,7 +683,8 @@ gsap.registerPlugin(ScrollTrigger)
     opacity: 1,
     duration: 1.5,
     delay: 0,
-    markers: true
+    markers: true,
+    immediateRender: false
   })
 
   gsap.to('#steps2', {
@@ -677,7 +696,8 @@ gsap.registerPlugin(ScrollTrigger)
     opacity: 1,
     duration: 1.5,
     delay: 1,
-    markers: true
+    markers: true,
+    immediateRender: false
   })
 
   gsap.to('#steps3', {
@@ -689,5 +709,6 @@ gsap.registerPlugin(ScrollTrigger)
     opacity: 1,
     duration: 1.5,
     delay: 2,
-    markers: true
+    markers: true,
+    immediateRender: false
   })
