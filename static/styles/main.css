@@ -15,14 +15,14 @@
   src: url('../fonts/LEMONMILK-Medium.otf'); 
 }
 
-body { 
+html, body { 
   margin: 0; 
   padding: 0;
   font-size: 1rem;
   font-weight: normal;
   background-color: #222;
   box-sizing: border-box;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 
@@ -30,42 +30,10 @@ p {
   overflow: scroll;
 }
 
-#headerContainer {
-  position: absolute;
-  top: 18vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
-}
-
-#stepsContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: flex-start;
-  margin-top: 12%;
-}
-
-.stepsCard {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 2rem;
-  padding: 1rem;
-  border-radius: 1rem;
-  background-color: #2a2a2a;
-  opacity: 0;
-}
 
 .header {
   font-family: 'header';
-  font-size: 7rem;
+  font-size: 6rem;
   margin: 0;
   color: white;
 }
@@ -75,13 +43,6 @@ p {
   font-size: 2rem;
   margin: -2rem 0 0 0;
   color: white;
-}
-
-#THREEHeroContainer {
-  position: relative;
-  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
-  height: 80vh;
-  top: 10vh;
 }
 
 #debugPane {
@@ -103,15 +64,62 @@ p {
 #heroSection {
   height: 100vh;
   width: 100vw;
+  max-width: 100%;
+  /* overflow: hidden; */
+}
+
+#headerContainer {
+  position: absolute;
+  top: 18vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
+}
+
+#THREEHeroContainer {
+  position: relative;
+  cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
+  height: 80vh;
+  top: 10vh;
 }
 
 #futureSection {
   height: 100vh;
   width: 100vw;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 20%;
+}
+
+#stepsContainer {
+  background-color: greenyellow;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-top: 12%;
+}
+
+#steps2 {
+  margin: 0 1rem;
+}
+
+.stepsCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #2a2a2a;
+  opacity: 0;
 }
 
 .futureCopy {
@@ -129,27 +137,42 @@ li {
 }
 
 
-
-.sectionCenterContainer {
+#inspectSection {
   height: 100vh;
   width: 100vw;
+  max-width: 100%;
   display: flex;
-  /* padding: 0 10%; */
-  align-items: center;
   justify-content: center;
+  align-items: center; 
 }
 
 #inspectContainer {
-  background-color: #222;
+  height: 100%;
+  width: 90%;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center; 
 }
 
 #THREEInspContainer {
+  height: 50%;
+  flex: 1;
   position: relative;
   z-index: 99;
-  padding: 0;
   cursor: url('../textures/inspectorCursor32.png') 16 16, auto;
+}
+
+#THREEInspWindow {
+  height: 100%;
+  width: 100%;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+#inspectTextArea {
+  height: 50%;
+  flex: 1;
 }
 
 .threeIcon {
@@ -166,18 +189,6 @@ li {
   float: left;
   height: 2rem;
   padding: 0.25rem 0.5rem;
-}
-
-#THREEInspWindow {
-  width: 600px;
-  height: 500px;
-  border-radius: 1.5rem;
-  overflow: hidden;
-}
-
-#inspectTextArea {
-  width: 40vw;
-  padding: 0 0.5rem;
 }
 
 H2 {
@@ -221,7 +232,6 @@ b {
 }
 
 .inspectCard {
-  width: 40vw;
   position: absolute;
   opacity: 0;
   transform: translateX(-100px);
@@ -393,9 +403,35 @@ b {
   position: absolute;
   z-index: 1;
   width: 25%;
-  top: 45%;
+  top: 30%;
   right: 5%;
   padding: 2%;
   border-radius: 1rem;
   box-shadow: 0px 11px 12px 3px rgba(0,0,0,0.25)
+}
+
+/* mobile */
+@media screen and (max-width: 480px) {
+
+}
+
+/* tablet */
+@media screen and (max-width: 1000px) {
+  html {
+    font-size: 0.7rem;
+  }
+  #inspectContainer {
+    flex-direction: column;
+  }
+
+  #THREEInspContainer {
+    height: 40%;
+    width: 100%;
+  }
+  
+  #inspectTextArea {
+    margin-top: 3rem;
+    height: 40%;
+    width: 100%;
+  }
 }
