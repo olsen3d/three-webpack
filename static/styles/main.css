@@ -119,6 +119,21 @@ p {
   border-radius: 1rem;
   background-color: #2a2a2a;
   opacity: 0;
+  box-shadow: 0px 11px 12px 3px rgba(0,0,0,0.25)
+}
+
+.aerialCardOutside {
+  display: none;
+  font-family: copy;
+  color: #ddd;
+  font-size: 1rem;
+  word-break: break-word;
+  overflow: hidden;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #2a2a2a;
+  box-shadow: 0px 11px 12px 3px rgba(0,0,0,0.25);
+  margin: 1rem 5%;
 }
 
 .futureCopy {
@@ -360,7 +375,7 @@ b {
   position: absolute;
   z-index: 1;
   width: 25%;
-  bottom: 20%;
+  bottom: 10%;
   left: 3%;
   padding: 2%;
   border-radius: 1rem;
@@ -374,7 +389,7 @@ b {
   position: absolute;
   z-index: 1;
   width: 25%;
-  bottom: 15%;
+  bottom: 5%;
   left: 50%;
   padding: 2%;
   border-radius: 1rem;
@@ -456,5 +471,16 @@ b {
     margin-top: 3rem;
     height: 40%;
     width: 100%;
+  }
+
+  #aerialSection {
+    height: 120vh;
+  }
+
+  .aerialCardOutside {
+    display: block;
+  }
+  .aerialCardInside {
+    display: none;
   }
 }

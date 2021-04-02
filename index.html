@@ -178,22 +178,34 @@
 
 
 
-    <!-- <section id='aerialSection'>
+    <section id='aerialSection'>
       <H2>THE FIRST FLIGHT ON ANOTHER PLANET</H2>
-      <div id="aerialCardHelipad">
-        <b>Helipad:</b> A 10-by-10-foot (3-by-3-meter) area where Perseverance will deploy the Ingenuity Mars Helicopter. Preferably, the box should be free of rocks more than 2 inches (5 centimeters) high and should be sloped no more than an average of around 5 degrees.
-      </div>
-      <div id="aerialCardAirfield">
-        <b>Airfield:</b> A 33-by-33-foot (10-by-10-meter) area surrounding the helipad. The surface should have as few rocks as possible exceeding 2 inches (5 centimeters) in height and have an average slope of no more than approximately 4 degrees.
-      </div>
-      <div id="aerialCardFlightZone">
-        <b>Flight Zone:</b> The area is defined by a boundary that extends horizontally 50 feet (15 meters) beyond the Mars Helicopter’s expected flight path during test flights. The terrain inside the zone must have sufficient visual features for the helicopter to track its movements using the onboard navigation camera.
-      </div>
       <div id="aerialContainer">
-        <div id="aerialCardTwitcher">
+        <img id='aerialImage' src='static/textures/aerial.jpg'>
+        <div id="aerialCardHelipad" class='aerialCardInside'>
+          <b>Helipad:</b> A 10-by-10-foot (3-by-3-meter) area where Perseverance will deploy the Ingenuity Mars Helicopter. Preferably, the box should be free of rocks more than 2 inches (5 centimeters) high and should be sloped no more than an average of around 5 degrees.
+        </div>
+        <div id="aerialCardAirfield" class='aerialCardInside'>
+          <b>Airfield:</b> A 33-by-33-foot (10-by-10-meter) area surrounding the helipad. The surface should have as few rocks as possible exceeding 2 inches (5 centimeters) in height and have an average slope of no more than approximately 4 degrees.
+        </div>
+        <div id="aerialCardFlightZone" class='aerialCardInside'>
+          <b>Flight Zone:</b> The area is defined by a boundary that extends horizontally 50 feet (15 meters) beyond the Mars Helicopter’s expected flight path during test flights. The terrain inside the zone must have sufficient visual features for the helicopter to track its movements using the onboard navigation camera.
+        </div>
+        <div id="aerialCardTwitcher" class='aerialCardInside'>
           <b>Twitcher’s point:</b> Perseverance’s parking spot during the Ingenuity flight tests. “Twitcher” is a British (and now Martian) term for those who travel long distances to see a rare bird. Twitcher’s Point must allow direct line-of-site between the rover and the helicopter during all portions of potential flight tests for optimal radio communications and imaging.
         </div>
-        <img id='aerialImage' src='static/textures/aerial.jpg'>
+      </div>
+      <div class='aerialCardOutside'>
+        <b>Helipad:</b> A 10-by-10-foot (3-by-3-meter) area where Perseverance will deploy the Ingenuity Mars Helicopter. Preferably, the box should be free of rocks more than 2 inches (5 centimeters) high and should be sloped no more than an average of around 5 degrees.
+      </div>
+      <div class='aerialCardOutside'>
+        <b>Airfield:</b> A 33-by-33-foot (10-by-10-meter) area surrounding the helipad. The surface should have as few rocks as possible exceeding 2 inches (5 centimeters) in height and have an average slope of no more than approximately 4 degrees.
+      </div>
+      <div class='aerialCardOutside'>
+        <b>Flight Zone:</b> The area is defined by a boundary that extends horizontally 50 feet (15 meters) beyond the Mars Helicopter’s expected flight path during test flights. The terrain inside the zone must have sufficient visual features for the helicopter to track its movements using the onboard navigation camera.
+      </div>
+      <div class='aerialCardOutside'>
+        <b>Twitcher’s point:</b> Perseverance’s parking spot during the Ingenuity flight tests. “Twitcher” is a British (and now Martian) term for those who travel long distances to see a rare bird. Twitcher’s Point must allow direct line-of-site between the rover and the helicopter during all portions of potential flight tests for optimal radio communications and imaging.
       </div>
     </section>
 
@@ -234,7 +246,7 @@
       <div id="bottomImgContainer">
         <img id="bottomImg" src="static/icons/step3.gif" />
       </div>
-    </section> -->
+    </section>
 
     
     <video id="dustVideo" playsinline webkit-playsinline muted loop autoplay width="640" height="480" src="static/textures/dust.mp4" style="display: none;"></video>
