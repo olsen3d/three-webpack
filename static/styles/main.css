@@ -97,7 +97,6 @@ p {
 }
 
 #stepsContainer {
-  background-color: greenyellow;
   width: 90%;
   display: flex;
   flex-direction: row;
@@ -420,6 +419,30 @@ b {
   html {
     font-size: 0.7rem;
   }
+
+  H2 {
+    font-size: 1.5rem;
+  }
+
+  #futureSection {
+    height: 150vh;
+    padding-top: 40%;
+  }
+
+  #stepsContainer {
+    flex-direction: column;
+    margin-top: -10%;
+  }
+
+  #steps2 {
+    margin: 0;
+    margin-bottom: 50px;
+  }
+
+  .stepsCard {
+    margin-bottom: 50px;
+  }
+
   #inspectContainer {
     flex-direction: column;
   }
