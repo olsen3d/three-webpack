@@ -112,7 +112,7 @@ gsap.registerPlugin(ScrollToPlugin)
     const loaderTexture = new THREE.TextureLoader();
 
     const heroTextureBG = loaderTexture.load(
-      '../static/textures/herobg1.jpg',
+      '../static/textures/herobg2.jpg',
         () => {
           hero360 = new THREE.WebGLCubeRenderTarget(heroTextureBG.image.height);
           hero360.fromEquirectangularTexture(heroRenderer, heroTextureBG);
@@ -122,7 +122,7 @@ gsap.registerPlugin(ScrollToPlugin)
     )
 
     const inspTextureBG = loaderTexture.load(
-      '../static/textures/bgInspect3.jpg',
+      '../static/textures/bgInspect4.jpg',
         () => {
           background360 = new THREE.WebGLCubeRenderTarget(inspTextureBG.image.height);
           background360.fromEquirectangularTexture(inspRenderer, inspTextureBG);
