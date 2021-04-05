@@ -46,6 +46,7 @@ gsap.registerPlugin(ScrollToPlugin)
   let isHeroRendering = true
   // let modelReady = false
   let isHeroHovering = false
+  let startSequence = false
 
   //INSP PRE-LOAD CONDITIONALS
 
@@ -87,7 +88,6 @@ gsap.registerPlugin(ScrollToPlugin)
     inspCamera.position.set(250, 340, 500)
     inspCamera.lookAt(0, 340, 0)
 
-    console.log(inspCamera)
 
 
     //GROUPS AND CONTROLLERS
@@ -292,7 +292,7 @@ gsap.registerPlugin(ScrollToPlugin)
     heroRenderer.domElement.id = 'threeHero'
 
     inspRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
-    inspRenderer.setPixelRatio(1)
+    inspRenderer.setPixelRatio(window.devicePixelRatio) // window.devicePixelRatio || 1
     inspRenderer.setSize(inspContainer.clientWidth, inspContainer.clientHeight)
     inspContainer.appendChild(inspRenderer.domElement)
 
@@ -431,7 +431,13 @@ gsap.registerPlugin(ScrollToPlugin)
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
+  function onDocumentTouchMove(event) {
+    event.preventDefault();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  }
   document.addEventListener('mousemove', onDocumentMouseMove, false);
+  document.addEventListener('pointermove', onDocumentTouchMove, false);
 
 
   //HERO FUNCTIONALITY ----------------------------------------------------------------------------------------------------
@@ -464,6 +470,38 @@ gsap.registerPlugin(ScrollToPlugin)
   const takeOff = () => {
     gsap.to(hoverHeight, { duration: 2, ease: 'power1.inOut', normal: hoverHeight.normalMax })
     gsap.to(heroIngenuityController.rotation, { duration: 4, ease: 'back.inOut(4)', y: 0 })
+  }
+
+  const startLoading = () => {
+    const loadingText = document.querySelector('#loadingText')
+    let dots = 0
+
+    const loading = setInterval(() => {
+      if (dots === 0) {
+        loadingText.innerHTML = 'Preparing for liftoff'
+        dots++
+      } else if (dots === 1) {
+        loadingText.innerHTML = 'Preparing for liftoff.'
+        dots++
+      } else if (dots === 2) {
+        loadingText.innerHTML = 'Preparing for liftoff..'
+        dots++
+      } else if (dots === 3) {
+        loadingText.innerHTML = 'Preparing for liftoff...'
+        dots = 0
+      }
+
+      if (startSequence) clearInterval(loading)
+    }, 100)
+  }
+
+  const displayThree = () => {
+    const loadingScreen = document.querySelector('#loading')
+    gsap.to('#loading', {
+      opacity: 0,
+      duration: 1,
+      onComplete: () => {loadingScreen.style.display = 'none'}
+    })
   }
 
   const hover = () => {
@@ -558,11 +596,13 @@ gsap.registerPlugin(ScrollToPlugin)
 
   //UPDATE
   const heroUpdate = () => {
-    if (modelReady && !startTakeOff) {
+    if (modelReady && !startTakeOff && !startSequence) {
       setTimeout(() => {startTakeOff = true}, 1000)
       setTimeout(() => {inFlight = true}, 2000)
+      displayThree()
       takeOff()
       if (!isHeroHovering) hover()
+      startSequence = true
     }
 
     heroIngenuityController.position.y = hoverHeight.currentX()
@@ -591,6 +631,7 @@ gsap.registerPlugin(ScrollToPlugin)
 
   init()
   heroRenderLoop()
+  startLoading()
 
 
   //INSP LOOP --------------------------------------------------------------------------------------------------------------
@@ -677,7 +718,7 @@ gsap.registerPlugin(ScrollToPlugin)
   gsap.to('#steps1', {
     scrollTrigger: {
       trigger: '#steps1',
-      toggleActions: 'play reset play reset'
+      // toggleActions: 'play reset play reset'
     },
     y: 125,
     opacity: 1,
@@ -690,7 +731,7 @@ gsap.registerPlugin(ScrollToPlugin)
   gsap.to('#steps2', {
     scrollTrigger: {
       trigger: '#steps2',
-      toggleActions: 'play reset play reset'
+      // toggleActions: 'play reset play reset'
     },
     y: 125,
     opacity: 1,
@@ -703,12 +744,60 @@ gsap.registerPlugin(ScrollToPlugin)
   gsap.to('#steps3', {
     scrollTrigger: {
       trigger: '#steps3',
-      toggleActions: 'play reset play reset'
+      // toggleActions: 'play reset play reset'
     },
     y: 125,
     opacity: 1,
     duration: 1.5,
     delay: 2,
     markers: true,
+    immediateRender: false
+  })
+
+  gsap.to('#aerialCardHelipad', {
+    scrollTrigger: {
+      trigger: '#aerialCardHelipad',
+      // toggleActions: 'play reset play reset'
+    },
+    y: 35,
+    opacity: 1,
+    duration: 1.5,
+    delay: 1,
+    immediateRender: false
+  })
+
+  gsap.to('#aerialCardAirfield', {
+    scrollTrigger: {
+      trigger: '#aerialCardAirfield',
+      // toggleActions: 'play reset play reset'
+    },
+    y: 35,
+    opacity: 1,
+    duration: 1.5,
+    delay: 1,
+    immediateRender: false
+  })
+
+  gsap.to('#aerialCardFlightZone', {
+    scrollTrigger: {
+      trigger: '#aerialCardFlightZone',
+      // toggleActions: 'play reset play reset'
+    },
+    y: 35,
+    opacity: 1,
+    duration: 1.5,
+    delay: 1,
+    immediateRender: false
+  })
+
+  gsap.to('#aerialCardTwitcher', {
+    scrollTrigger: {
+      trigger: '#aerialCardTwitcher',
+      // toggleActions: 'play reset play reset'
+    },
+    y: 35,
+    opacity: 1,
+    duration: 1.5,
+    delay: 1,
     immediateRender: false
   })

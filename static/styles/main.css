@@ -30,6 +30,20 @@ p {
   overflow: scroll;
 }
 
+#loading {
+  position: absolute;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+}
+
+#loadingText {
+  position: relative;
+  top: 50%;
+  left: 10%;
+}
+
 
 .header {
   font-family: 'header';
@@ -285,7 +299,7 @@ b {
   margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
+  flex-direction: column;
   padding: 0 10%;
 }
 
@@ -389,7 +403,7 @@ b {
   position: absolute;
   z-index: 1;
   width: 25%;
-  bottom: 5%;
+  bottom: 8%;
   left: 50%;
   padding: 2%;
   border-radius: 1rem;
@@ -403,7 +417,8 @@ b {
   position: absolute;
   z-index: 1;
   width: 25%;
-  top: 5%;
+  top: 2%;
+  opacity: 0;
   left: 30%;
   padding: 2%;
   border-radius: 1rem;
@@ -417,32 +432,68 @@ b {
   position: absolute;
   z-index: 1;
   width: 25%;
-  top: 30%;
+  top: 26%;
+  opacity: 0;
   right: 5%;
   padding: 2%;
   border-radius: 1rem;
   box-shadow: 0px 11px 12px 3px rgba(0,0,0,0.25)
 }
 
-/* mobile */
-@media screen and (max-width: 480px) {
+#sourceOutside {
+  display: none;
+}
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+/* mobile */
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 0.5rem;
+  }
+  H2 {
+    font-size: 1rem;
+  }
+  .header {
+    font-size: 4rem;
+  }
+
+  #footerContainer {
+    padding: 0 5%;
+  }
+
+  #sourceInside {
+    display: none;
+  }
+  #sourceOutside {
+    font-family: 'copy';
+    margin-top: 2rem;
+    display: block;
+  }
 }
 
 /* tablet */
 @media screen and (max-width: 1000px) {
   html {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 
   H2 {
     font-size: 1.5rem;
   }
 
+  .header {
+    font-size: 5rem;
+  }
+
   #futureSection {
-    height: 150vh;
+    height: 160vh;
     padding-top: 40%;
   }
+
 
   #stepsContainer {
     flex-direction: column;
@@ -474,7 +525,7 @@ b {
   }
 
   #aerialSection {
-    height: 120vh;
+    height: 130vh;
   }
 
   .aerialCardOutside {
