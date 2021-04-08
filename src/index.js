@@ -286,7 +286,7 @@ gsap.registerPlugin(ScrollToPlugin)
     //RENDERERS
 
     heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
-    heroRenderer.setPixelRatio(1)
+    heroRenderer.setPixelRatio(window.devicePixelRatio)
     heroRenderer.setSize(document.body.clientWidth, window.innerHeight * 0.8)
     heroContainer.appendChild(heroRenderer.domElement)
     heroRenderer.domElement.id = 'threeHero'
@@ -420,7 +420,6 @@ gsap.registerPlugin(ScrollToPlugin)
     inspCamera.aspect = inspContainer.clientWidth / inspContainer.clientHeight
     inspCamera.updateProjectionMatrix()
     inspRenderer.setSize(inspContainer.clientWidth, inspContainer.clientHeight)
-    
     inspContainer.appendChild(inspRenderer.domElement)
   }
   window.addEventListener('resize', onWindowResize, false)
