@@ -490,7 +490,7 @@ b {
   }
 
   #futureSection {
-    height: 160vh;
+    height: 180vh;
     padding-top: 40%;
   }
 
@@ -533,5 +533,26 @@ b {
   }
   .aerialCardInside {
     display: none;
+  }
+}
+
+@media screen and (max-height: 700px) {
+  #inspectSection {
+    height: 120vh;
+  }
+  #aerialSection {
+    height: 160vh;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  #futureSection {
+    height: 140vh;
+  }
+  #inspectSection {
+    height: 140vh;
+  }
+  #aerialSection {
+    height: 160vh;
   }
 }
